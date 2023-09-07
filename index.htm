@@ -1,29 +1,28 @@
 <!DOCTYPE html><!--
-|^\___ ___ _ _ ___/^|  A strange, hacky, and experimental barebones project that tracks various markets.
+|^\___ ___ _ _ ___/^|  A butchered fork of larval.com (stocks) for this special niche (domains).
 | | .'|  _| | | .'| |  (: An excuse to escape into the nostalgia of slapping something together agian :)
 |_|__,|_|  \_/|__,|_|  -->
 <html lang="en-us">
 <head>
- <title>Larval - Live market volatility dashboard</title>
+ <title>Larval - Live domain auctions</title>
  <meta charset="UTF-8" /> 
- <meta name="description" content="A tool to help traders find live volatility in the stock market as it happens, alerting you to the biggest movements in the last 5 minutes." />
- <meta name="keywords" content="live,stock,market,volatility,vega,implied,iv,stocktwits" />
- <meta name="url" content="https://larval.com" />
+ <meta name="description" content="A tool to help domainers find domains being bid up within last minutes of their auctions." />
+ <meta name="keywords" content="domain,auction,market,live" />
+ <meta name="url" content="https://bid.larval.com" />
  <meta name="referrer" content="origin" /> 
  <meta name="viewport" content="initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, width=device-width" />
  <meta name="theme-color" content="#303630" />
  <meta property="og:type" content="website" />
- <meta property="og:title" content="Larval - Live market volatility dashboard" />
- <meta property="og:description" content="A tool to help traders find live volatility in the stock market as it happens, alerting you to the biggest movements in the last 5 minutes." />
- <meta property="og:url" content="https://larval.com" />
- <meta property="og:image" content="https://larval.com/screenshot.png" />
+ <meta property="og:title" content="Larval - Live domain auctions" />
+ <meta property="og:description" content="A tool to help domainers find domains being bid up within last minutes of their auctions." />
+ <meta property="og:url" content="https://bid.larval.com" />
  <meta property="og:image:width" content="1200" />
  <meta property="og:image:height" content="630" />
  <link rel="icon" type="image/png" sizes="256x256" href="/icon-256x256.png">
  <link rel="icon" type="image/png" sizes="192x192" href="/icon-192x192.png">
  <link rel="icon" type="image/png" sizes="32x32" href="/icon-32x32.png">
  <link rel="icon" type="image/png" sizes="16x16" href="/icon-16x16.png">
- <link rel="canonical" href="https://larval.com" />
+ <link rel="canonical" href="https://bid.larval.com" />
  <link rel="stylesheet" type="text/css" href="/larval.css" />
  <script src="/larval.js"></script>
  <noscript><style>#l_logo { visibility: visible !important; }</style></noscript>
@@ -117,7 +116,7 @@
      </path>
     </g>
    </svg>
-   <div id="l_logo_tag">stock market <span id="l_logo_stage">volatility</span><span id="l_logo_top">accountability</span>  in its <i id="l_logo_tag_type"><i>l</i><i>a</i><i>r</i><i>v</i><i>a</i><i>l</i></i> stage</div>
+   <div id="l_logo_tag">domain auctions in their <i id="l_logo_tag_type"><i>l</i><i>a</i><i>r</i><i>v</i><i>a</i><i>l</i></i> stage</div>
   </div>
   <div id="l_progress">
    <div id="l_progress_display">
@@ -130,8 +129,7 @@
   <div id="l_marquee">
    <div id="l_marquee_content">
     <h1 id="l_marquee_about">
-     <div id="l_stage_about"><i>&#8226;</i> Larval is a utility that looks for volatility in the stock market as it happens. <i>&#8226;</i> It works by monitoring the market in ~5 minute intervals and alerts you if the price change meets your criteria. <i>&#9650;</i> The countdown slider above indicates the time remaining until the next polling update. <i>&#9660;</i> The settings button below allows you to control the criteria that alerts you after each polling update. <i>&#8226;</i> Alt-click rows or use the <span>~</span> key to keep specific symbols on top. <i>&#8226;</i> Swipe or use <span>&#8644;</span> arrow keys to rewind and navigate your backlog history. <i>&#8226;</i> Shift-click rows to toggle to the <a href="//top.larval.com" style="text-decoration:none" target="_blank">top.larval.com</a> symbol viewer, a <a href="//stocktwits.com" style="text-decoration:none" target="_blank" referrerpolicy="no-referrer">stocktwits.com</a> tool that monitors the accuracy of claims made by its users. <i>&#8226;</i> For a complete list of navigational keyboard shortcuts type <a id="l_hotkey_help" href="#0">&quot;?&quot;</a></div>
-     <div id="l_top_about"><i>&#8226;</i> It appears you've happened upon this unpromoted and unpublicised sidecar project: <span>expect hiccups</span>. <i>&#8226;</i> Larval TOP is a (extremely beta) tracker for bullish and bearish sentiment made on <a href="//stocktwits.com" style="text-decoration:none" target="_blank">stocktwits.com</a>. <i>&#8226;</i> User posts are followed for one week or until the stock goes up or down 20%, whichever happens first. <i>&#8226;</i> Leaderboard aggregation currently requires users to have a history of 5 or more unique symbols, at least one post in the last month, and all posts must be during market hours. <i>&#8226;</i> Most <a href="//stocktwits.com" style="text-decoration:none" target="_blank">stocktwits.com</a> urls can have the <span>.com</span> changed to <span>.top</span> (<a href="//stocktwits.top" style="text-decoration:none" target="_blank">stocktwits.top</a>) to quickly view a user or symbol track record.</div>
+     <div id="l_stage_about"><i>&#8226;</i> Larval BID is a simple tool to help domainers find domains being bid up within last minutes of their auctions. <i>&#8226;</i> It works by monitoring the market in ~5 minute intervals and alerts you if the change meets your criteria. <i>&#9650;</i> The countdown slider above indicates the time remaining until the next polling update. <i>&#9660;</i> The settings button below allows you to control the criteria that alerts you after each polling update. <i>&#8226;</i> Highlighted rows indicate new bids which are eligible for notifications based on your settings. <i>&#8226;</i> This site is a fork and butchered repurposing of <a href="//www.larval.com" style="text-decoration:none" target="_blank">www.larval.com</a> and <a href="//top.larval.com" style="text-decoration:none" target="_blank">top.larval.com</a>, sites for monitoring the stock market.</div>
     </h1>
    </div>
    <div id="l_marquee_content_clone"></div>
@@ -142,19 +140,18 @@
  <div id="l_settings_button">&#9650; settings &#9650;</div>
  <div id="l_control">
   <table id="l_control_table">
-   <tr class="l_stage_row"><th colspan="6">~5 minute % change threshold to alert (<i>0.0% to disable</i>)</th></tr>
-   <tr class="l_stage_row">
-    <td class="l_tab" id="l_stocks"><i>&#10003;</i>Stocks<span>&nbsp;(AH)</span></td>
-    <td class="l_tab" id="l_etfs"><i>&#10003;</i>ETFs</td>
-    <td class="l_tab" id="l_crypto"><i>&#10003;</i>Crypto</td>
-    <td class="l_tab" id="l_futures"><i>&#10003;</i>Futures</td>
-    <td class="l_tab" id="l_currency"><i>&#10003;</i>Currency</td>
+   <tr class="l_stage_row"><th colspan="6">threshold to alert on change (<i>0 for all</i>)</th></tr>
+   <tr class="l_stage_row"><td colspan="5"><input type="range" min="0" max="10" value="0" class="l_range" id="l_range_bids" /></td><td class="l_tab_info">&lt;=&nbsp;<i id="l_range_bids_display">0</i>&nbsp;bids</td></tr>
+   <tr class="l_stage_row"><td colspan="5"><input type="range" min="0" max="600" value="0" class="l_range" id="l_range_mins" /></td><td class="l_tab_info">&lt;=&nbsp;<i id="l_range_mins_display">0</i>&nbsp;mins</td></tr>
+   <tr class="l_stage_row"><td colspan="5"><input type="range" min="0" max="30" value="0" class="l_range" id="l_range_len" /></td><td class="l_tab_info">&lt;=&nbsp;<i id="l_range_len_display">0</i>&nbsp;len</td></tr>
+   <tr class="l_stage_row"><td colspan="6">
+    <span><input type="checkbox" class="l_checkbox" id="l_tld_com" name="l_tld_com" />&nbsp;<label for="l_tld_com">COM</label>&nbsp;<input type="checkbox" class="l_checkbox" id="l_tld_net" name="l_tld_net" />&nbsp;<label for="l_tld_net">NET</label>&nbsp;<input type="checkbox" class="l_checkbox" id="l_tld_org" name="l_tld_org" />&nbsp;<label for="l_tld_org">ORG</label>&nbsp;<input type="checkbox" class="l_checkbox" id="l_tld_else" name="l_tld_else" />&nbsp;<label for="l_tld_else">Else</label></span>
+    | <span><input type="checkbox" class="l_checkbox" id="l_numbers" name="l_numbers" />&nbsp;<label for="l_numbers">Numbers</label>&nbsp;<input type="checkbox" class="l_checkbox" id="l_hyphens" name="l_hyphens" />&nbsp;<label for="l_hyphens">Hyphens</label></span>
+    | <span><input type="checkbox" class="l_checkbox" id="l_audible" name="l_audible" />&nbsp;<label for="l_audible">Audible notifications</label></td></tr></span>
+   <tr class="l_stage_row" style="display:none">
+    <td class="l_tab" id="l_bids"><i>&#10003;</i>bids</td>
     <td class="l_tab_info">&nbsp;&nbsp;<input type="checkbox" class="l_checkbox" id="l_show" name="l_show" /><label for="l_show">Show</label>&nbsp;&nbsp;</td>
    </tr>
-   <tr class="l_stage_row"><td colspan="5"><input type="range" min="0" max="200" value="0" class="l_range" id="l_range_up" /></td><td class="l_tab_info">&gt;<i id="l_range_up_display">0.0</i>%</td></tr>
-   <tr class="l_stage_row"><td colspan="5"><input type="range" min="0" max="200" value="0" class="l_range" id="l_range_down" /></td><td class="l_tab_info">&lt;<i id="l_range_down_display">0.0</i>%</td></tr>
-   <tr class="l_stage_row"><td colspan="5"><input type="range" min="0" max="999" value="0" class="l_range" id="l_range_volume" /></td><td class="l_tab_info">&gt;<i id="l_range_volume_display">0</i>&nbsp;<i id="l_range_volume_type" title="Toggle volume per minute (VPM)">vol?</i></td></tr>
-   <tr class="l_stage_row"><td colspan="6"><input type="checkbox" class="l_checkbox" id="l_audible" name="l_audible" />&nbsp;<label for="l_audible">Audible notifications</label> <input type="checkbox" class="l_checkbox" id="l_options_only" name="l_options_only" />&nbsp;<label for="l_options_only">Only notify if a stock has options</label> <input type="checkbox" class="l_checkbox" id="l_notify_halts" name="l_notify_halts" />&nbsp;<label for="l_notify_halts">Notify when halted</label></td></tr>
    <tr class="l_top_row"><th colspan="6">Enter a $symbol, @username, or #message to search for:</th></tr>
    <tr class="l_top_row"><td colspan="6"><input type="text" id="l_top_search" placeholder="[ type and hit enter to search ]" autocorrect="off" autocomplete="off" /></th></tr>
   </table>
@@ -166,10 +163,10 @@
  </div>
  <div id="l_more">...</div>
  <div id="l_footer">
-  <a id="l_alt_link" target="_blank" tabindex="-1"><i>top</i><u>www</u> . larval . com</a> &#8226; <a href="mailto:contact@larval.com?subject=Larval%20inquiry" tabindex="-1">contact@larval . com</a> &#8226; <a class="l_last_update" title="Force update now" tabindex="-1">last update: <i id="l_last_update">NEVER</i></a>
+  <a id="l_alt_link" target="_blank" tabindex="-1"><i>www . larval . com</a> &#8226; <a href="mailto:contact@larval.com?subject=Larval%20inquiry" tabindex="-1">contact@larval . com</a> &#8226; <a class="l_last_update" title="Force update now" tabindex="-1">last update: <i id="l_last_update">NEVER</i></a>
  </div>
  <div id="l_fragments">
-  <table id="f_no_results_row"><tr><td class="l_none" colspan="7">@</td></tr></table>
+  <table id="f_no_results_row"><tr><td class="l_none" colspan="8">@</td></tr></table>
   <div id="f_marquee_blink_wide"><i class="l_marquee_blink_wide">&#8226;</i></div>
   <div id="f_marquee_blink"><i class="l_marquee_blink">&#8226;</i></div>
   <div id="f_empty_cell"><div class="l_none">&#8226;</div></div>

@@ -1,4 +1,4 @@
-/*|___ ___ _ _ ___| |  A strange, hacky, and experimental barebones project that tracks various markets.
+/*|___ ___ _ _ ___| |  A butchered fork of larval.com (stocks) for this special niche (domains).
 | | .'|  _| | | .'| |  (: An excuse to escape into the nostalgia of slapping something together agian :)
 |_|__,|_|  \_/|__,|*/
 @font-face {
@@ -582,7 +582,10 @@ i { font-style: normal !important; }
 	text-align: center;
 	border: 1px solid #444;
 }
-#l_control_table tr:nth-child(6) {
+#l_control_table tr td:nth-child(2) {
+	text-align: left;
+}
+#l_control_table tr:nth-child(5) {
 	border-top: 1px solid #333;
 	background-color: #F8F8F8;
 }
@@ -602,7 +605,7 @@ i { font-style: normal !important; }
 	border-left: 1px solid #333;
 	border-right: 1px solid #333;
 }
-#l_control_table tr:nth-child(6) td { padding: 5px 5px 8px 5px !important; }
+#l_control_table tr:nth-child(5) td { padding: 5px 5px 8px 5px !important; }
 #l_content_table {
 	width: 100%;
 	border-collapse: collapse;
@@ -635,6 +638,7 @@ i { font-style: normal !important; }
 	border-bottom: 1px solid #CCC;
 	border-top: 1px solid #CCC;
 	text-align: right;
+	background-clip: padding-box;
 }
 #l_content_table tr td .l_hover_container  { position: relative; }
 #l_content_table tr td .l_hover_active {
@@ -740,6 +744,7 @@ i { font-style: normal !important; }
 	word-break: break-all;
 	word-wrap: break-word;
 }
+.l_stage_row span { white-space: nowrap; }
 .l_stage_only .l_content_table_notify_0 tr td:nth-child(3),
 .l_top_only:not(.l_top_log) .l_content_table_notify_0 tr td:nth-child(4),
 .l_top_log .l_content_table_notify_0 tr td:nth-child(7),
@@ -788,8 +793,8 @@ i { font-style: normal !important; }
 	cursor: default !important;
 	user-select: none;
 }
-#l_stocks span { display: none; }
-#l_stocks_ah span { display: inline; }
+#l_bids span { display: none; }
+#l_bids_ah span { display: inline; }
 .l_tab_info {
 	width: 1%;
 	padding: 10px 20px 10px 20px !important;
@@ -835,9 +840,10 @@ i { font-style: normal !important; }
 	width: 25px;
 	height: 25px;
 	border-radius: 50%; 
+	background: var(--l-color-12);
 	cursor: pointer;
 }
-#l_range_up::-webkit-slider-thumb {
+#l_range_bids::-webkit-slider-thumb {
 	appearance: none;
 	width: 25px;
 	height: 25px;
@@ -845,29 +851,14 @@ i { font-style: normal !important; }
 	background: var(--l-color-12);
 	cursor: pointer;
 }
-#l_range_up::-moz-range-thumb {
+#l_range_bids::-moz-range-thumb {
 	width: 25px;
 	height: 25px;
 	border-radius: 50%;
 	background: var(--l-color-12);
 	cursor: pointer;
 }
-#l_range_down::-webkit-slider-thumb {
-	appearance: none;
-	width: 25px;
-	height: 25px;
-	border-radius: 50%;
-	background: var(--l-color-16);
-	cursor: pointer;
-}
-#l_range_down::-moz-range-thumb {
-	width: 25px;
-	height: 25px;
-	border-radius: 50%;
-	background: var(--l-color-16);
-	cursor: pointer;
-}
-#l_range_volume::-webkit-slider-thumb {
+#l_range_mins::-webkit-slider-thumb {
 	appearance: none;
 	width: 25px;
 	height: 25px;
@@ -875,17 +866,32 @@ i { font-style: normal !important; }
 	background: var(--l-color-12);
 	cursor: pointer;
 }
-#l_range_volume::-moz-range-thumb {
+#l_range_mins::-moz-range-thumb {
 	width: 25px;
 	height: 25px;
 	border-radius: 50%;
 	background: var(--l-color-12);
 	cursor: pointer;
 }
-#l_range_up_display, #l_range_down_display, #l_range_volume_display {
+#l_range_len::-webkit-slider-thumb {
+	appearance: none;
+	width: 25px;
+	height: 25px;
+	border-radius: 50%;
+	background: var(--l-color-12);
+	cursor: pointer;
+}
+#l_range_len::-moz-range-thumb {
+	width: 25px;
+	height: 25px;
+	border-radius: 50%;
+	background: var(--l-color-12);
+	cursor: pointer;
+}
+#l_range_bids_display, #l_range_mins_display, #l_range_len_display {
 	padding-left: 5px;
 }
-#l_range_volume_type {
+#l_range_len_type {
 	text-decoration: underline;
 	cursor: pointer;
 }
@@ -1125,7 +1131,7 @@ input[type=checkbox]:checked:disabled + label:before {
 	#l_content_table tr.l_notify_down:hover .l_history_toggle, #l_content_table tr.l_notify_down td.l_news:hover, #l_content_table tr.l_notify_top_down:hover .l_history_toggle, #l_content_table tr.l_notify_top_down td.l_news:hover {
 		background-color: var(--l-color-16) !important;
 	}
-	#l_content_table tr td:nth-child(1):hover ~ .l_history_toggle:not(.l_history), #l_root:not(.l_top_only) #l_content_table tr td:nth-child(2):hover ~ .l_history_toggle  { 
+	#l_content_table tr td:nth-child(1):hover ~ .l_history_toggle:not(.l_history), #l_content_table tr td:nth-child(3):hover ~ .l_history_toggle:not(.l_history), #l_content_table tr td:nth-child(4):hover ~ .l_history_toggle:not(.l_history), #l_root:not(.l_top_only) #l_content_table tr td:nth-child(2):hover ~ .l_history_toggle  { 
 		background-color: initial !important;
 	}
 	#l_content_table tr:hover td:not(.l_static) .l_hover_inactive, #l_content_table tr:hover td:not(.l_static) .l_hover_inactive, #l_content_table .l_tr_keyrow_selected td:not(.l_static) .l_hover_inactive, .l_content_table_alt_display tr td:not(.l_static) .l_hover_inactive {
@@ -1176,6 +1182,7 @@ input[type=checkbox]:checked:disabled + label:before {
 		font-size: 13px;
 	}
 	#l_content, #l_control, #l_marquee_container, #l_spread { width: 90%; }
+	#l_content_table tr th:nth-child(7), #l_content_table tr td:nth-child(7) { display: none; }
 	#l_content { font-size: 12px; }
 	#l_footer { font-size: 15px; }
 	#l_last_update { font-size: 12px; }
@@ -1222,7 +1229,7 @@ input[type=checkbox]:checked:disabled + label:before {
 	}
 	#l_last_update { font-size: 10px; }
 	#l_spread_container, .l_notify_popout, .l_notify_disable, .l_notify_enable, .l_content_table_header i { display: none; }
-	#l_stocks_ah span { font-size: 5px !important; }
+	#l_bids_ah span { font-size: 5px !important; }
 	.l_tab { font-size: 9px !important; }
 	.l_tab_info { padding: 10px 3px 10px 3px !important; }
 }

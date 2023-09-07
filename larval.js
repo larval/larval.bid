@@ -1,4 +1,4 @@
-/*|___ ___ _ _ ___| |  A strange, hacky, and experimental barebones project that tracks various markets.
+/*|___ ___ _ _ ___| |  A butchered fork of larval.com (stocks) for this special niche (domains).
 | | .'|  _| | | .'| |  (: An excuse to escape into the nostalgia of slapping something together agian :)
 |_|__,|_|  \_/|__,|*/
 
@@ -10,43 +10,18 @@ _fragments: {},
 _warnings: [],
 _extURLOptions: 'noreferrer noopener',
 _topURLMap: { '@#':/^[#/]*?([A-Z0-9_]+)\/message\/([0-9]+)/i, '@':/^[#/]*?([A-Z0-9_]{5,32}|((?=.*?\d)(?=.*?[A-Z])[A-Z\d]+))\/?$/i, '$':/^[#/]*?symbol\/([A-Z]{1,4})\/?$/ },
-_multipliers: { 'B':1000000000, 'M':1000000, 'K':1000 },
+_multipliers: { 'B':1000000000, 'M':1000000, 'K':1000, '':1 },
 _symbolsStatic: ['^VIX', '^DJI', '^GSPC', '^IXIC', '^RUT', '^TNX', '^TYX'],
-_assetTypes: ['l_stocks', 'l_etfs', 'l_crypto', 'l_futures', 'l_currency'],
+_assetTypes: ['l_bids'],
 _char: { 'up':"\u25b2 ", 'down':"\u25bc ", 'updown':"\u21c5 ", 'warning':"\u26a0 ", 'halt':"\u25a0 ", 'etf':"~", 'crypto':"*", 'futures':'^', 'currency':"$", 'user':"@" },
 _themes: {
-	'default':    ['#A6FDA4','#E1FDE4','#88CF86','#7DFF7A','#A6FDA4','#FF4444','#2A302A','#303630','#363C36','#825900','#FFDE96','#FAEED4','#A6FDA4','#00AA00','#85FF92','#FF0000','#FDA4A4','#8FDE8C','#FAF4E6'],
-	'afterhours': ['#95ABFC','#CDDFFF','#8BA4FF','#7492FF','#D274FF','#FF4444','#2A2A30','#303034','#36363C','#660303','#FF73BB','#D4DCFA','#A0FACA','#00AAAA','#85FFD6','#FF0080','#FDA4CF','#A6B7F7','#E6EAFA'],
-	'bloodbath':  ['#FC656F','#FAB6B6','#F77272','#FF4747','#FFAE74','#FFCC54','#361010','#4B1818','#602121','#825900','#FFEC73','#F2D088','#D4F0A3','#91AD03','#FAB143','#FF0000','#FF7070','#FC868E','#FAF4E6'],
-	'top':        ['#A6FFFF','#E1FDFF','#88CFD1','#A6FFFF','#75bcff','#9175ff','#2A3030','#303636','#363C3C','#825900','#FFDE96','#FCF0D2','#A6FFFF','#00AA00','#85FF92','#FF0000','#FDA4A4','#8FDEDE','#FAF4E6']
+	'default':    ['#FAAD69','#FCE4BD','#DEA876','#FF9A3D','#7AFFED','#55B8FA','#302D2A','#363330','#3C3936','#006A82','#96EBFF','#D4F3FA','#96EBFF','#00AA00','#FFCF85','#FF0000','#FFCF85','#DEB28C','#E6F6FA']
 }, _theme: '', _themeBGColorIndex: 7,
 _keyMap: {
-	'A': ['https://www.seekingalpha.com/symbol/@', 'https://www.seekingalpha.com/symbol/@-USD'],
-	'B': ['https://www.barchart.com/stocks/quotes/@', 'https://www.barchart.com/crypto/coins/@'],
-	'C': ['https://www.cnbc.com/quotes/@', 'https://www.cnbc.com/quotes/@.CM='],
-	'D': ['https://research.tdameritrade.com/grid/public/research/stocks/summary?symbol=@'],
-	'E': ['https://www.etrade.wallst.com/v1/stocks/snapshot/snapshot.asp?symbol=@'],
-	'F': ['https://www.finviz.com/quote.ashx?t=@', 'https://www.finviz.com/crypto_charts.ashx?t=@USD'],
-	'G': ['https://www.benzinga.com/quote/@/short-interest', 'https://www.benzinga.com/quote/@-USD'],
-	'H': ['https://www.stockcharts.com/h-sc/ui?s=@'],
-	'I': ['https://www.investing.com/search/?q=@'],
-	'J': ['https://www.wsj.com/market-data/quotes/@'],
-	'K': ['https://www.morningstar.com/stocks/xnas/@/quote'],
-	'L': ['https://www.fool.com/quote/@', 'https://www.fool.com/quote/crypto/@'],
-	'M': ['https://www.marketwatch.com/investing/stock/@', 'https://www.marketwatch.com/investing/cryptocurrency/@USD'],
-	'N': ['https://money.cnn.com/quote/quote.html?symb=@'],
-	'O': ['https://www.cboe.com/delayed_quotes/@'],
-	'P': ['https://eresearch.fidelity.com/eresearch/goto/evaluate/snapshot.jhtml?symbols=@'],
-	'Q': ['https://www.nasdaq.com/market-activity/stocks/@'],
-	'R': ['https://www.robinhood.com/stocks/@', 'https://www.robinhood.com/crypto/@'],
-	'S': ['https://www.stocktwits.com/symbol/@', 'https://www.stocktwits.com/symbol/@.X'],
-	'T': ['https://www.tradestation.com/research/stocks/@'],
-	'U': ['https://www.gurufocus.com/stock/@'],
-	'V': ['https://www.tradingview.com/chart/?symbol=@', 'https://www.tradingview.com/chart/?symbol=@USD'],
-	'W': ['https://www.twitter.com/search?q=%24@','https://www.twitter.com/search?q=%24@.X'],
-	'X': ['https://www.foxbusiness.com/quote?stockTicker=@'],
-	'Y': ['https://finance.yahoo.com/quote/@', 'https://finance.yahoo.com/quote/@-USD', 'https://finance.yahoo.com/quote/@=F', 'https://finance.yahoo.com/quote/@=X', 'https://stocktwits.com/@'],
-	'Z': ['https://www.zacks.com/stock/quote/@'],
+	'DD': ['https://www.dynadot.com/market/auction/@'],
+	'GD': ['https://auctions.godaddy.com/trpItemListing.aspx?miid=@'],
+	'NC': ['https://www.namecheap.com/market/@/'],
+	'XX': ['https://www.whois.com/whois/@']
 },
 _taMap: {
 	'AS': ['Ascending triangle', '&#128200;&nbsp;asc<i>&nbsp;triangle</i>', 'F'],
@@ -74,9 +49,9 @@ _taMap: {
 _eventMap: {
 	   '#l_root': {
 			click:e     => void(0),
-	}, '#l_audible, #l_options_only, #l_notify_halts, #l_show': {
+	}, '#l_audible, #l_tld_com, #l_tld_net, #l_tld_org, #l_tld_else, #l_numbers, #l_hyphens': {
 			change:e    => $CFG.change(e)
-	}, '#l_range_up, #l_range_down, #l_range_volume': {
+	}, '#l_range_bids, #l_range_mins, #l_range_len': {
 			input:e     => $CFG.updateRange(e),
 			change:e    => $CFG.change(e)
 	}, '#l_content_table': {
@@ -86,7 +61,7 @@ _eventMap: {
 	}
 },
 _clickMap: {
-	'l_alt_link':_              => $TOP.LOG ? (location.href='//larval.com') : $DAT.toggleStage($TOP.ON),
+	'l_alt_link':_              => location.href='//larval.com',
 	'l_content_table_header':_  => $DAT.setStageSort(_.idx),
 	'l_fixed':_                 => $GUI.broadBehaviorToggle($TOP.ON),
 	'l_history_toggle':_        => $HST.dropDownToggle(_.idx),
@@ -96,17 +71,16 @@ _clickMap: {
 	'l_marquee_info':_          => $DAT.setURLFormat(_.sym, false),
 	'l_marquee_talk':_          => $TOP.searchFromURL(_.raw, true),
 	'l_news':_                  => typeof $DAT.DATA['items'][_.idx][$LNK]=='number' ? $GUI.relatedToggle(_.idx) : $W.open($DAT.DATA['items'][_.idx][$LNK], `l_news_${_.sym}`, _extURLOptions),
-	'l_notify_disable':_        => $NFY.exception(_.raw, true),
-	'l_notify_enable':_         => $NFY.exception(_.raw, false),
-	'l_range_volume_type':_     => $GUI.vpmToggle(),
+	'l_notify_disable':_        => $NFY.exception($DAT.DATA['items'][_.idx][$DOM], true),
+	'l_notify_enable':_         => $NFY.exception($DAT.DATA['items'][_.idx][$DOM], false),
 	'l_related':_               => $GUI.relatedToggle(_.idx),
 	'l_settings_button':_       => $CFG.buttonToggle(null, true),
 	'l_ta':_                    => $W.open(_keyMap[_.el.dataset.keymap?_.el.dataset.keymap:$GUI.KEY_MAP_IDX_DEFAULT][$KSTK].replace('@', _.sym), `l_ta_${_.sym}`, _extURLOptions),
 	'l_tab':_                   => $CFG.tabSelect(_.el),
 	'l_warning_audio':_         => $NFY.playAudio(_audioTest, false, true),
 	'l_warning_never_notify':_  => $NFY.requestPermission(true),
-	'shift_default':_           => _.raw ? $TOP.searchFromURL('/symbol/'+($M(/[A-Z0-9_]+$/ig,_.raw)?_M[0]:_.raw), true) : $DAT.editSymbolsOnTop(),
-	'alt_default':_             => _.raw ? $DAT.setSymbolsOnTop(_.raw, null, true) : $DAT.editSymbolsOnTop(),
+	'shift_default':_           => void(0),
+	'alt_default':_             => void(0),
 	'default':_                 => $W.open($createURL(_.sym, _.type), `l_${_.type}_${_.sym}`, _extURLOptions)
 },
 _hotKeyMap: {
@@ -114,9 +88,7 @@ _hotKeyMap: {
 	'ArrowUp':e                 => $GUI.KEY_ROW--,
 	'ArrowLeft':e               => $HST.gotoStageData(1),
 	'ArrowRight':e              => $HST.gotoStageData(-1),
-	'Backquote':e               => $DAT.editSymbolsOnTop(),
 	'Backslash':(e,ev)          => $ANI.toggle(null, ev.shiftKey),
-	'Backspace':e               => $GUI.vpmToggle(),
 	'End':e                     => $GUI.KEY_ROW = e.parentElement.childElementCount - 1,
 	'Enter':e                   => $EVT.click(e),
 	'Equal':e                   => $CFG.updateAudioVolume(true),
@@ -134,27 +106,24 @@ _hotKeyMap: {
 	'PageUp':e                  => $GUI.KEY_ROW-=$GUI.TABLE_ROWS_IN_VIEW,
 	'Slash':e                   => $MRQ.hotKeyHelp(),
 	'Space':e                   => $EVT.click(e),
-	'Tab':e                     => $DAT.toggleStage(e)
+	'Tab':(e,ev)                => $ANI.toggle(null, ev.shiftKey)
 }, _hotKeyMapIgnore: ['ShiftLeft','ShiftRight'],
 _enumMap: {
-	'stage': {
-		'SYM':_   => $H(_.val),
-		'NAM':_   => $H(_.val),
-		'PCT5':_  => $isHaltRow(_.row) ? $H(_.val?_.val:'HALTED') : $htmlPercent(_.val,2),
-		'PCT':_   => $htmlPercent(_.val,2),
-		'PRC':_   => '$' + $N(_.val,_.row[$OPT]=='currency'&&_.val<10?4:2),
-		'VOL':_   => $multiplierFormat(_.val,1,true),
-		'OPT':_   => $H(_.val),
-		'OIV':_   => _.row[$SYM][0]==_char['crypto'] ? ('MC#'+_.val) : ($H(_.val>0?_.val:('~'+Math.abs(_.val))))+'%IV',
-		'ERN':_   => $H(_.val),
-		'PRC5':_  => (_.val<0?'-$':'+$') + $N(Math.abs(_.val),_.row[$OPT]=='currency'?4:2),
-		'VOL5':_  => '+' + $multiplierFormat(_.val,1),
-		'PCTM':_  => 'M=' + $htmlPercent(_.val,0),
-		'PCTY':_  => 'Y=' + $htmlPercent(_.val,0),
-		'NWS':_   => $H(_.val),
-		'LNK':_   => _.val,
+	'bid': {
+		'AID':_   => _.val.substr(1,2),
+		'DOM':_   => $H(_.val),
+		'AGE':_   => $H(_.val)+'Y',
+		'TRF':_   => $H(_.val),
+		'BID':_   => $H(_.val),
+		'PRC':_   => '$'+$N(Math.abs(_.val), 2),
+		'TMU':_   => $dateFormat(_.val),
+		'TME':_   => $dateFormat(_.val),
+		'LBID':_  => _.val ? ('+'+(_.row[$BID]-_.val<0?0:_.row[$BID]-_.val)) : 0,
+		'LPRC':_  => _.val ? ('+$'+$N(Math.abs(_.row[$PRC]-_.val),2)) : 0,
+		'LTMU':_  => $timeRemaining(_.row[$TMU]),
+		'LTME':_  => $timeRemaining(_.row[$TME]),
 		'KSTK':0, 'KETF':0, 'KCRP':1, 'KFTR':2, 'KCUR':3, 'KUSR':4,
-		'WAUD':0, 'WNOT':1, 'HLT':2, 'AGE': 6, 'TAN':8, 'REL':8
+		'WAUD':0, 'WNOT':1, 'HLT':2, 'REL':8
 	},
 	'top': {
 		'TUSR':_   => $H(_.val),
@@ -179,13 +148,17 @@ _settings: {
 	'l_exceptions':       '',
 	'l_vpm':              null,
 	'l_no_notifications': false,
-	'l_stocks':           { 'l_show':true,  'l_range_up':50,  'l_range_down':50,  'l_range_volume':25,   'multiplier':'K', 'percent_shift':10,  'volume_shift':1,   'vpm_shift':10,   'vpm_precision':1 },
-	'l_stocks_ah':        { 'l_show':true,  'l_range_up':100, 'l_range_down':100, 'l_range_volume':null, 'multiplier':'K', 'percent_shift':10,  'volume_shift':1,   'vpm_shift':1,    'vpm_precision':0 },
-	'l_etfs':             { 'l_show':true,  'l_range_up':100, 'l_range_down':100, 'l_range_volume':50,   'multiplier':'M', 'percent_shift':100, 'volume_shift':100, 'vpm_shift':1000, 'vpm_precision':0 },
-	'l_crypto':           { 'l_show':false, 'l_range_up':50,  'l_range_down':50,  'l_range_volume':25,   'multiplier':'M', 'percent_shift':10,  'volume_shift':1,   'vpm_shift':1000, 'vpm_precision':0 },
-	'l_futures':          { 'l_show':false, 'l_range_up':50,  'l_range_down':50,  'l_range_volume':null, 'multiplier':'K', 'percent_shift':100, 'volume_shift':1,   'vpm_shift':1,    'vpm_precision':0 },
-	'l_currency':         { 'l_show':false, 'l_range_up':25,  'l_range_down':25,  'l_range_volume':null, 'multiplier':'K', 'percent_shift':100, 'volume_shift':1,   'vpm_shift':1,    'vpm_precision':0 }
-}, _settingsBase: {}, _settingsSelectedTab: {}, _settingsSelectedTabName: '',
+	'l_range_bids':       1,
+	'l_range_mins':       30,
+	'l_range_len':        20,
+	'l_numbers':          false,
+	'l_hyphens':          false,
+	'l_tld_com':          true,
+	'l_tld_net':          true,
+	'l_tld_org':          true,
+	'l_tld_else':         true,
+	'l_bids':             { 'l_show': true }
+}, _settingsBase: {}, _settingsSelectedTab: {}, _settingsSelectedTabName: 'l_bids',
 _vibrateAlert: [250,250,500,250,750,250,1000], _audioAlert: '/larval.mp3', _audioTest: 'data:audio/mpeg;base64,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',
 
 /*************************************************************************************************\
@@ -265,11 +238,18 @@ EVT: {
 			if(dataRef !== null && ref)
 				break;
 		}
+		$GUI.KEY_MAP_IDX = 'XX';
 		if(typeof dataRef == 'string')
 			sym = dataRef;
 		else if(typeof dataRef == 'number') {
 			idx = dataRef;
-			sym = $DAT.DATA['items'][idx] ? $DAT.DATA['items'][idx][$SYM] : idx;
+			if(!$DAT.DATA['items'][idx])
+				sym = idx;
+			else if($DAT.DATA['items'][idx][$AID].length > 3)
+				sym = $DAT.DATA['items'][idx][$AID].substr(3);
+			else
+				sym = $DAT.DATA['items'][idx][$DOM];
+			$GUI.KEY_MAP_IDX = $DAT.DATA['items'][idx][$AID].substr(1,2);
 		}
 		const raw=sym;
 		if((e.ctrlKey || e.altKey || e.type=='contextmenu') && (el.dataset&&el.dataset.alt!='none'))
@@ -558,7 +538,7 @@ ANI: {
 \*******  SETTINGS & GENERAL USER CONFIGURATION  ****************************  [ $CFG.* ]  *******/
 CFG: {
 	setup: () => {
-		$GUI.setStage(($TOP.searchFromURL(location.hash?location.hash:location.pathname) || $D.domain.match(/top|log/i)) ? 'top' : 'stage');
+		$GUI.setStage('bid');
 		if($TOP.ON) $CFG.buttonTextToggle(false);
 		$CFG.load(false);
 	},
@@ -580,16 +560,14 @@ CFG: {
 		else
 			$CFG.set('l_exceptions', '', true);
 		$DAT.getSymbolsOnTop();
-		if(!$hasSettings() && $isWeekend(now)) {
-			$CFG.set('l_show', false, true, 'l_stocks_ah');
-			$CFG.set('l_show', false, true, 'l_etfs');
-			$CFG.set('l_show', true, true, 'l_crypto');
-			$CFG.tabUpdateUI();
-		}
+		$CFG.tabUpdateUI();
 		for(let key of Object.keys(_settings)) {
 			if($E(key) && _E.type == 'checkbox')
 				_E.checked = _settings[key];
+			else if(_E && _E.type == 'range')
+				_E.value = (typeof _settings[key]=='number' ? _settings[key] : 0);
 		}
+/*
 		for(let key of Object.keys(_settingsSelectedTab)) {
 			if(!$E(key) || !_E['type'])
 				continue;
@@ -598,7 +576,8 @@ CFG: {
 			else if(_E.type == 'range')
 				_E.value = (typeof _settingsSelectedTab[key]=='number' ? _settingsSelectedTab[key] : 0);
 		}
-		for(let id of ['l_range_up','l_range_down','l_range_volume'])
+*/
+		for(let id of ['l_range_bids','l_range_mins','l_range_len'])
 			$CFG.updateRange(id);
 	},
 	set: (name, value, passive, tab) => {
@@ -642,16 +621,7 @@ CFG: {
 			id = idOrEvent.target.id;
 		const input=$E(id), display=$E(`${id}_display`);
 		if(!input || !display) return;
-		if(id == 'l_range_volume') {
-			if(!(input.disabled=typeof _settingsSelectedTab['l_range_volume']!='number'))
-				display.innerHTML = (_settings['l_vpm'] ? $multiplierExplicit(input.value*_multipliers[_settingsSelectedTab['multiplier']] / _settingsSelectedTab['vpm_shift'],'K',_settingsSelectedTab['vpm_precision']) : ((input.value / _settingsSelectedTab['volume_shift']).toFixed(Math.ceil(Math.log10(_settingsSelectedTab['volume_shift']))) + _settingsSelectedTab['multiplier']));
-			else
-				display.innerHTML = 'N/A';
-		}
-		else
-			display.innerHTML = (input.value / _settingsSelectedTab['percent_shift'] * (id=='l_range_down'?-1:1)).toFixed(Math.ceil(Math.log10(_settingsSelectedTab['percent_shift'])))
-		if(_settings['l_vpm'] !== null)
-			$E('l_range_volume_type').innerHTML = (_settings['l_vpm'] ? 'vpm' : 'vol');
+		display.innerHTML = input.value;
 	},
 	updateAudio: on => $MRQ.flash(`Audible notifications: <i class="l_marquee_alt_padded">${$CFG.set('l_audible',($E('l_audible').checked=on))?'Enabled':'Disabled'}</i>`),
 	updateAudioVolume: boolOrInt => {
@@ -698,12 +668,18 @@ CFG: {
 /*************************************************************************************************\
 \*******  MODEL & DATA "STAGE" LOGIC  ***************************************  [ $DAT.* ]  *******/
 DAT: {
-	MODE: 'stage', DATA: null, SORT: 0, LAST: 0, ON_TOP: {}, FETCHING: null, TIMEOUT: null,
+	MODE: 'bid', DATA: null, SORT: 0, LAST: 0, ON_TOP: {}, FETCHING: null, TIMEOUT: null,
 
 	setup: () => void(0),
 	setStage: stageData => {
 		if(!$DAT.DATA)
 			$E('l_fixed').style.filter = 'grayscale(0%)';
+		stageData['items'].forEach((r,i) => {
+			if(!stageData['items'][i][$LTMU])
+				stageData['items'][i][$LTMU] = stageData['items'][i][$TMU];
+			if(!stageData['items'][i][$LTME])
+				stageData['items'][i][$LTME] = stageData['items'][i][$TME];
+		});
 		$DAT.DATA = $DAT.vpmStage(stageData);
 		$GUI.setSpread(stageData ? stageData['spreads'] : null);
 		$GUI.TABLE_SOFT_LIMIT = Math.abs($GUI.TABLE_SOFT_LIMIT);
@@ -766,8 +742,8 @@ DAT: {
 		if((minutesSinceOpen=(stageTime.getHours()-args.hourOffset)*60+stageTime.getMinutes()) > args.maxMinutes)
 			minutesSinceOpen = args.maxMinutes;
 		for(let i=0; i < stageData['items'].length; i++) { 
-			const minutes = (stageData['items'][i][$SYM][0]==_char['crypto'] ? minutesInADay : minutesSinceOpen);
-			[$VOL,$VOL5].forEach(column => {
+			const minutes = (stageData['items'][i][$DOM][0]==_char['crypto'] ? minutesInADay : minutesSinceOpen);
+			[$AGE,$AGE5].forEach(column => {
 				if(typeof stageData['items'][i][column] != 'number')
 					return;
 				else if(minutes < 1 || stageData['items'][i][column] < 1)
@@ -781,40 +757,7 @@ DAT: {
 		stageData['vpm'] = vpm;
 		return(stageData);
 	},
-	toggleStage: e => {
-		const explicit=(typeof(e)=='boolean'), topUrl=(e&&typeof(e)=='string'?e:'');
-		if(!explicit && !topUrl && (!e||!e.code||e.code!='Tab'||$DAT.FETCHING))
-			return(!$ANI.COMPLETE || !$DAT.DATA);
-		if(e.preventDefault)
-			e.preventDefault();
-		if(topUrl)
-			$HST.push({'toggle':false, 'path':'/'});
-		[$MRQ.INTERVAL, $NFY.INTERVAL].forEach(i => i&&clearInterval(i));
-		[$MRQ.TIMEOUT, $DAT.TIMEOUT].forEach(t => t&&clearTimeout(t));
-		[$HST.DATA, $HST.SWAP] = [$HST.SWAP, $HST.DATA];
-		$CFG.buttonToggle(false);
-		$GUI.setStage($TOP.ON ? 'stage' : 'top');
-		$CFG.buttonTextToggle(false);
-		$CFG.tabSelect();
-		if($HST.DATA.length > 0)
-			$DAT.setStage($HST.DATA[0]);
-		else
-			$HST.FIRST = false;
-		if(!$TOP.ON || !$HST.DATA.length)
-			$NET.getStageData(true);
-		else if($TOP.ON && topUrl)
-			$TOP.searchFromURL(topUrl, true);
-		else if(explicit === false)
-			$TOP.searchRun('');
-		else
-			$GUI.contentTableUpdate();
-		$HST.gotoStageData($HST.IDX=0);
-		$MRQ.flash(`Toggling site mode to: <i>${$TOP.ON?'Top market players':'Volatility'}</i>`);
-		$scrollToTop();
-		if(!explicit)
-			$HST.push({'toggle':$TOP.ON, 'path':topUrl?topUrl:'/'});
-		return(true);
-	},
+	toggleStage: () => {},
 	editSymbolsOnTop: () => {
 		let symbols=_settings['l_symbols_on_top'];
 		if((symbols=prompt("Enter symbols you would like to have sticky on top: \n[NOTE: alt-click rows to individually add or remove]", symbols?symbols:'')) === null)
@@ -875,8 +818,8 @@ DAT: {
 /*************************************************************************************************\
 \*******  GUI & GENERAL VIEW LOGIC  *****************************************  [ $GUI.* ]  *******/
 GUI: {
-	MAPS: {'top':[],'stage':[]}, MAP: null,
-	KEY_MAP_IDX_DEFAULT: 'Y', KEY_MAP_IDX: null, KEY_ROW: 0,
+	MAPS: {'top':[],'bid':[]}, MAP: null,
+	KEY_MAP_IDX_DEFAULT: 'XX', KEY_MAP_IDX: null, KEY_ROW: 0,
 	TABLE_SOFT_LIMIT: 100, TABLE_ROWS_IN_VIEW: 10,
 	FRAMES: null, SWIPE_START: null,
 
@@ -910,7 +853,7 @@ GUI: {
 	setStage: set => {
 		$TOP.ON = (set=='top');
 		$GUI.MAP = $GUI.MAPS[$DAT.MODE=set];
-		_title = document.title = ($TOP.ON?'Larval - Top market players':'Larval - Live market volatility dashboard');
+		_title = document.title;
 		['l_stage_only','l_top_only'].forEach((cn,i) => $E('l_root').classList[i^$TOP.ON?'remove':'add'](cn));
 	},
 	forceRedraw: el => el && (el.style.transform='translateZ(0)') && void el.offsetHeight,
@@ -935,10 +878,10 @@ GUI: {
 		else $POL.forceNextStage();		
 	},
 	relatedToggle: idx => {
-		let mainRow=$DAT.DATA.items[idx], symbols=[mainRow[$SYM]].concat(mainRow[$REL]), indices=($DAT.DATA.related&&$DAT.DATA.related[0]==idx?null:[idx]);
+		let mainRow=$DAT.DATA.items[idx], symbols=[mainRow[$DOM]].concat(mainRow[$REL]), indices=($DAT.DATA.related&&$DAT.DATA.related[0]==idx?null:[idx]);
 		if(indices) {
 			$DAT.DATA.items.forEach((row, idx) => {
-				if($I(symbols, row[$SYM]) > 0)
+				if($I(symbols, row[$DOM]) > 0)
 					indices.push(idx);
 			});
 			if(indices.length < 2)
@@ -952,7 +895,6 @@ GUI: {
 			return;
 		$CFG.set('l_vpm', !_settings['l_vpm']);
 		$DAT.DATA = $DAT.vpmStage($DAT.DATA);
-		$CFG.updateRange('l_range_volume');
 		$GUI.contentTableUpdate();
 	},
 	setSpread: spreads => {
@@ -985,21 +927,7 @@ GUI: {
 	},
 	cell: (row, type, idx) => row[type] && $GUI.MAP[type] ? $GUI.MAP[type]({'val':row[type], 'row':row, 'type':type, 'idx':typeof(idx)=='number'?idx:-1}) : (typeof type=='string'?type:$F('f_empty_cell')),
 	contentTableRoll: roll => $E('l_content_table').classList[roll?'add':'remove']('l_content_table_alt_display'),
-	contentTableRowPopout: row => {
-		if(row[$REL] && typeof row[$REL] == 'object')
-			$F('f_class_title_display', ['l_notify_popout l_related', 'Related movers', '&#128279;&nbsp;<i>related </i>movers']);
-		else if(row[$TAN] && typeof row[$TAN] == 'string' && _taMap[row[$TAN]])
-			$F('f_class_title_keymap_display', ['l_notify_popout l_ta', _taMap[row[$TAN]][0], (_taMap[row[$TAN]][2]?_taMap[row[$TAN]][2]:$GUI.KEY_MAP_IDX_DEFAULT), _taMap[row[$TAN]][1]]);
-		else if(row[$ERN] && row[$NWS] && typeof row[$ERN] != 'object' && typeof row[$NWS] != 'object')
-			$F('f_class_title_display', ['l_notify_popout l_news', `News and earnings on ${$GUI.cell(row,$ERN)}`, `&#128197;&nbsp;${$GUI.cell(row,$ERN)}<i>&nbsp;+&nbsp;news</i>`]);
-		else if(row[$ERN] && typeof row[$ERN] != 'object')
-			$F('f_class_title_display', ['l_notify_popout', `Earnings on ${$GUI.cell(row,$ERN)}`, `&#128198;&nbsp;${$GUI.cell(row,$ERN)}<i>&nbsp;earnings</i>`]);
-		else if(row[$NWS] && typeof row[$NWS] != 'object')
-			$F('f_class_title_display', ['l_notify_popout l_news', 'Company news', '&#128197;&nbsp;<i>recent </i>news']);
-		else
-			$F('');
-		return(_F);
-	},
+	contentTableRowPopout: row => $F(''),
 	contentTableUpdateRowCountThatAreInView: () => {
 		let rows=$E('l_content_table').getElementsByTagName('tr'), total=-5;
 		for(let i=0; i < rows.length; i++) {
@@ -1015,8 +943,8 @@ GUI: {
 	contentTableUpdate: (doNotify, doNotResetKeyRow) => {
 		if(!$DAT.DATA || !$ANI.COMPLETE) return;
 		$E('l_menu').className = ($ANI.COMPLETE && !$isWeekend() ? $GUI.getThemeMode('l_') : 'l_default');
-		let i=-1, r=-1, rowRules={}, notifyRows=[], indices=[], notify=false, notifyRelated=false, visibleRows=0, onTop={}, htmlRow='', htmlPriority='', htmlNormal='', html='<tr>', stockAssetType=($DAT.DATA['afterhours']?'l_stocks_ah':'l_stocks');
-		const columns = ($TOP.ON ? ['user',$TOP.LOG?'post':'symbols','bull','user%','real%','start',$TOP.LOG?'added':'end'] : ['symbol','company','~5min<i>ute</i>%','total%','price',$DAT.DATA['vpm']?'vpm':'volume','options']);
+		let i=-1, r=-1, rowRules={}, notifyRows=[], indices=[], notify=false, notifyRelated=false, visibleRows=0, onTop={}, htmlRow='', htmlPriority='', htmlNew='', htmlNormal='', html='<tr>', stockAssetType='l_bids';
+		const columns = ($TOP.ON ? ['user',$TOP.LOG?'post':'symbols','bull','user%','real%','start',$TOP.LOG?'added':'end'] : ['site','domain','age','traf<i>fic</i>','bids','price','updated','end']);
 		$E('l_root').classList[$DAT.DATA['locked']?'add':'remove']('l_locked');
 		if(_assetTypes[0] != stockAssetType) {
 			if($E(_assetTypes[0]))
@@ -1034,9 +962,9 @@ GUI: {
 		for(let assetType of _assetTypes) {
 			const thisType=_settings[assetType];
 			rowRules[assetType] = {
-				'up': thisType['l_range_up'] / thisType['percent_shift'],
-				'down': -thisType['l_range_down'] / thisType['percent_shift'],
-				'volume': (thisType['l_range_volume']?thisType['l_range_volume']:0) * _multipliers[thisType['multiplier']] / thisType[$DAT.DATA['vpm']?'vpm_shift':'volume_shift']
+				'bids': thisType['l_range_bids'],
+				'mins': thisType['l_range_mins'],
+				'len': thisType['l_range_len'],
 			}
 		}
 		for(let c=1,className=''; c <= columns.length; c++) {
@@ -1050,96 +978,59 @@ GUI: {
 		html += '</tr>';
 		if(doNotify)
 			$NFY.clear();
+
 		while((indices.length > 0 && (i=r=indices.pop())) || ++i < $DAT.DATA['items'].length) {
-			const row=$DAT.DATA['items'][i], rowType=_assetTypes[$I(_assetTypes,`l_${row[$OPT]}`)>=0?_I:(row[$SYM][0]==_char['etf']?1:0)], isStock=(_I<0), notifyExcept=($I($NFY.EXCEPTIONS,row[$SYM])>=0), isOnTop=!!$DAT.ON_TOP[row[$SYM]];
-			let rowClass=rowType, notifyControl='', historyClass=($TOP.LOG?'':'l_history_toggle');
-			if($TOP.ON) {
-				if(isOnTop) {
-					notifyControl = $F('f_class_title_display', ['l_notify_disable', `Remove ${$GUI.cell(row,$SYM)} from top`, 'x']);
-					rowClass = ' l_top_highlight';
-				}
-				htmlRow = `<tr class="${rowClass}" data-ref="${i}">
-					<td class="l_top_user">${notifyControl}<i>${$GUI.cell(row,$TUSR)}</i></td>
-					<td class="${historyClass}${row[$TTWT]?' l_twit':''}">${$GUI.cellRollover(row,$TSYM,$TTWT)}</td>
-					<td class="${historyClass}">${$GUI.cellTopRollover(row,$TRAT,$HMOD)}</td>
-					<td class="${historyClass}">${$GUI.cellTopRollover(row,$TPCT,$HPCT)}</td>
-					<td class="${historyClass}">${$GUI.cellTopRollover(row,$TPCR,$HPCR)}</td>
-					<td class="${historyClass}">${$GUI.cellTopRollover(row,$TSTR,$HSTR)}</td>
-					<td class="${historyClass}">${$GUI.cellTopRollover(row,$TEND,$HEND)}</td>
-					</tr>`;
+			const row=$DAT.DATA['items'][i], rowType='l_bids', isStock=(_I<0), notifyExcept=($I($NFY.EXCEPTIONS,row[$DOM])>=0), isOnTop=row[$AID][0]=='+';
+			let rowClass=rowType, notifyControl='', historyClass=($TOP.LOG?'':'l_history_toggle'), [tld,domain]=row[$DOM].split('.').reverse();
+			if(typeof _settings['l_tld_'+tld] == 'undefined')
+				tld = 'else';
+			notify = (!notifyExcept && isOnTop && _settings['l_tld_'+tld] && (!_settings['l_range_bids']||_settings['l_range_bids']>=row[$BID]) && (!_settings['l_range_mins']||_settings['l_range_mins']>=$timeRemaining(row[$TME],true)) && (!_settings['l_range_len']||_settings['l_range_len']>=domain.length) && !(!_settings['l_numbers']&&domain.match(/[0-9]/)) && !(!_settings['l_hyphens']&&domain.match('-')));
+			if(notify) {
+				rowClass += ` l_notify_top_up`;
+				notifyControl = $F('f_class_title_display', ['l_notify_disable', `Disable ${$GUI.cell(row,$DOM)} notifications for today`, 'x']);
 			}
-			else if($isHaltRow(row)) {
-				if(notifyExcept || !$isShowing(rowType))
-					continue;
-				notify = _settings['l_notify_halts'] && (!_settings['l_options_only']||row[$OPT]);
-				rowClass = (notify ? 'l_notify_halt' : 'l_halt');
-				htmlRow = `<tr class="${rowClass}" data-ref="${i}">
-					<td>
-					 ${$F('f_class_title_display', ['l_notify_disable', `Disable ${$GUI.cell(row,$SYM)} notifications for today`, 'x'])}
-					 ${$GUI.cell(row,$SYM)}
-					</td>
-					<td class="${row[$NWS]?'l_news':''}">${$GUI.cellRollover(row,$NAM,$NWS)}</td>
-					<td colspan="4">${$GUI.cell(row,$HLT)}</td>
-					<td>${$GUI.contentTableRowPopout(row)}${$GUI.cellRollover(row,$OPT,$OIV)}</td>
-					</tr>`;
+			else if(isOnTop)
+				rowClass += ' l_top_highlight';
+			if(notifyExcept)
+				notifyControl = $F('f_class_title_display', ['l_notify_enable', `Re-enable ${$GUI.cell(row,$DOM)} notifications`, '&#10003;']);
+			if($DAT.DATA.related && $DAT.DATA.related[0] == i) {
+				indices = indices.concat($DAT.DATA.related.slice(1));
+				if(i+1 < $DAT.DATA['items'].length)
+					indices.unshift(i+1);
+				notifyRelated = notify || isOnTop;
 			}
-			else {
-				if(!isOnTop && !$isShowing(rowType))
-					continue;
-				notify=( !notifyExcept && ((((rowRules[rowType]['up']&&row[$PCT5]>=rowRules[rowType]['up'])||(rowRules[rowType]['down']&&rowRules[rowType]['down']>=row[$PCT5])) && (!row[$VOL]||typeof row[$VOL]=='string'||row[$VOL]>=rowRules[rowType]['volume']) && (!_settings['l_options_only']||row[$OPT])) ));
-				if(notify) {
-					rowClass += ` l_notify_${isOnTop?'top_':''}${row[$PCT5]<0?'down':'up'}`;
-					notifyControl = $F('f_class_title_display', ['l_notify_disable', `Disable ${$GUI.cell(row,$SYM)} notifications for today`, 'x']);
-				}
-				else {
-					if(isOnTop)
-						rowClass += ' l_top_highlight';
-					if(notifyExcept)
-						notifyControl = $F('f_class_title_display', ['l_notify_enable', `Re-enable ${$GUI.cell(row,$SYM)} notifications`, '&#10003;']);
-					else if(isOnTop)
-						notifyControl = $F('f_class_title_display', ['l_notify_disable', `Remove ${$GUI.cell(row,$SYM)} from top`, 'x']);
-				}
-				if($DAT.DATA.related && $DAT.DATA.related[0] == i) {
-					indices = indices.concat($DAT.DATA.related.slice(1));
-					if(i+1 < $DAT.DATA['items'].length)
-						indices.unshift(i+1);
-					notifyRelated = notify || isOnTop;
-				}
-				if(indices.length > 0) {
-					rowClass += ' l_linked';
-					if(notifyRelated)
-						notify = notifyRelated;
-				}
-				else if(row[$REL] && typeof row[$REL]=='object' && typeof row[$LNK]=='undefined') {
-					row[$NWS] = `Related movers: ${row[$REL].join(', ')}`;
-					row[$LNK] = i;
-				}
-				htmlRow = `<tr class="${rowClass}" data-ref="${i}">
-					<td>${notifyControl}${$GUI.cell(row,$SYM)}</td>
-					<td class="${row[$NWS]?'l_news':'l_static'}">${$GUI.cellRollover(row,$NAM,$NWS,true)}</td>
-					<td class="l_history_toggle">${$GUI.cellRollover(row,$PCT5,$PCTM)}</td>
-					<td class="l_history_toggle">${$GUI.cellRollover(row,$PCT,$PCTY)}</td>
-					<td class="l_history_toggle">${$GUI.cellRollover(row,$PRC,$PRC5)}</td>
-					<td class="l_history_toggle">${$GUI.cellRollover(row,$VOL,$VOL5)}</td>
-					<td class="l_history_toggle">${i!=r?$GUI.contentTableRowPopout(row):''}${$GUI.cellRollover(row,$OPT,$OIV)}</td>
-					</tr>`;
+			if(indices.length > 0) {
+				rowClass += ' l_linked';
+				if(notifyRelated)
+					notify = notifyRelated;
 			}
+			htmlRow = `<tr class="${rowClass}" data-ref="${i}">
+				<td>${notifyControl}${$GUI.cell(row,$AID)}</td>
+				<td class="l_static">${$GUI.cellRollover(row,$DOM,-1,true)}</td>
+				<td>${$GUI.cell(row,$AGE)}</td>
+				<td>${$GUI.cell(row,$TRF)}</td>
+				<td class="l_history_toggle">${$GUI.cellRollover(row,$BID,$LBID)}</td>
+				<td class="l_history_toggle">${$GUI.cellRollover(row,$PRC,$LPRC)}</td>
+				<td class="l_history_toggle">${$GUI.cellRollover(row,$TMU,$LTMU)}</td>
+				<td class="l_history_toggle">${$GUI.cellRollover(row,$TME,$LTME)}</td>
+				</tr>`;
 			if(visibleRows >= 0 && $GUI.TABLE_SOFT_LIMIT > 0 && ++visibleRows >= $GUI.TABLE_SOFT_LIMIT)
 				visibleRows = -1;
-			if(isOnTop)
-				onTop[row[$SYM]] = htmlRow;
 			else if(notify) {
 				htmlPriority += htmlRow;
 				notifyRows.push(row);
 			}
+			else if(isOnTop)
+				htmlNew += htmlRow; 
 			else if(visibleRows >= 0)
 				htmlNormal += htmlRow;
+
 		}
 		if(visibleRows >= 0 && $GUI.TABLE_SOFT_LIMIT > 0)
 			$GUI.TABLE_SOFT_LIMIT = -$GUI.TABLE_SOFT_LIMIT;
 		if(_assetTypes.every(type => !_settings[type]['l_show']))
 			html += $F('f_no_results_row', ['No asset types are set to show in your settings.']);
-		else if(!htmlNormal && !htmlPriority && !Object.keys(onTop).length) {
+		else if(!htmlNormal && !htmlNew && !htmlPriority && !Object.keys(onTop).length) {
 			let noResults='No results found', dataWithLog=($DAT.DATA['log']?$DAT.DATA:$HST.DATA.find(d=>d['log']));
 			if($TOP.LOG)
 				noResults += ': Log data will appear when it becomes available.';
@@ -1148,9 +1039,9 @@ GUI: {
 			html += $F('f_no_results_row', [noResults]);
 		}
 		else {
-			for(let key of Object.keys(onTop).sort((a, b) => a.localeCompare(b)))
-				html += onTop[key];
-			html += htmlPriority + htmlNormal;
+//			for(let key of Object.keys(onTop))
+//				html += onTop[key];
+			html += htmlPriority + htmlNew + htmlNormal;
 		}
 		$E('l_more').className = $GUI.TABLE_SOFT_LIMIT > 0 ? 'l_more' : 'l_no_more';
 		$E('l_content_table').className = $E('l_awaiting_data') ? '' : 'l_content_tr_fade_in';
@@ -1185,7 +1076,7 @@ HST: {
 		return $HST.DATA.filter(stageData => stageData['ts'] <= ts).map(history => {
 			const epoch=$epochNow();
 			for(row of history['items']) {
-				if(row[$SYM]==sym && !$isHaltRow(row))
+				if(row[$DOM]==sym && !$isHaltRow(row))
 					return([...row, null, `~${Math.round((epoch-history['ts'])/60,0)}m&nbsp;ago`]);
 			}
 		}).reverse();
@@ -1207,26 +1098,26 @@ HST: {
 	pushWithPath: obj => obj['path'] ? $HST.push(obj) : null,
 	dropDownToggle: idx => (!$HST.FIRST&&!$TOP.ON&&$HST.IDX>=-1) ? $NET.getHistoryData({'dropDownIndex':idx}) : $HST.dropDown(idx),
 	dropDown: idx => {
-		const types=($TOP.ON?[$TSYM,$TRAT,$TPCT,$TPCR,$TSTR,$TEND]:[$PCT5,$PCT,$PRC,$VOL,$AGE]), stageRow=($DAT.DATA&&$DAT.DATA['items']&&$DAT.DATA['items'][idx]?$DAT.DATA['items'][idx]:null);
-		let stageDataForSymbols=($TOP.ON?stageRow[$THST]:$HST.getForSymbol(stageRow[$SYM],$DAT.DATA['ts'])), hadHistoryDisplays=[];
+		const types=($TOP.ON?[$TSYM,$TRAT,$TPCT,$TPCR,$TSTR,$TEND]:[$BID,$PRC,$TMU,$TME]), stageRow=($DAT.DATA&&$DAT.DATA['items']&&$DAT.DATA['items'][idx]?$DAT.DATA['items'][idx]:null);
+		let stageDataForSymbols=($TOP.ON?stageRow[$THST]:$HST.getForSymbol(stageRow[$DOM],$DAT.DATA['ts'])), hadHistoryDisplays=[], skipIdx=[];
 		if(!stageDataForSymbols) return;
 		if($A('.l_history_active'))
 			hadHistoryDisplays = Array.from(_A).map(e => e.remove() || e.id);
 		if($A('.l_history'))
 			_A.forEach(e => e.classList.remove('l_history'));
+		for(let i=0,lastBid=0; i < stageDataForSymbols.length; i++) {
+			if(!stageDataForSymbols[i] || lastBid == stageDataForSymbols[i][types[0]])
+				skipIdx.push(i);
+			else
+				lastBid = stageDataForSymbols[i][types[0]];
+		}
 		for(let type of types) {
-			const historyId=`l_history_${idx}_${type}`, hadHistoryDisplay=($I(hadHistoryDisplays,historyId)>=0), isAge=(!$TOP.ON && type==$AGE);
+			let historyId=`l_history_${idx}_${type}`, hadHistoryDisplay=($I(hadHistoryDisplays,historyId)>=0), htmlItems=[];
 			if(!$Q(`[data-ref='${idx}'] td:nth-of-type(${type+1})`))
 				continue;
-			let htmlItems=[], lastItem=null;
 			stageDataForSymbols.forEach((row, idx) => {
-				const isLast=(idx>=stageDataForSymbols.length-1);
-				if(lastItem == $F('f_blank_line') && isLast)
-					htmlItems.pop();
-				else if(row && ($TOP.ON||row[$PCT5]))
-					htmlItems.push(lastItem=`<div class="l_hover_container${$TOP.ON&&row[$HILT]?' l_top_searched_symbol':''}">${isAge?row.slice(-1)[0]:$GUI.cell(row,type,idx)}</div>`);
-				else if(lastItem != _F && !isLast)
-					htmlItems.push(lastItem=_F);
+				if(row && skipIdx.indexOf(idx) < 0)
+					htmlItems.push(`<div class="l_hover_container${$TOP.ON&&row[$HILT]?' l_top_searched_symbol':''}">${$GUI.cell(row,type,idx)}</div>`);
 			});
 			if(htmlItems.length == 0)
 				htmlItems.push(`<div class="l_hover_container">${$GUI.cell(stageRow,type)}</div>`);
@@ -1415,7 +1306,7 @@ MRQ: {
 /*************************************************************************************************\
 \*******  FETCH & NETWORK PARSING LOGIC  ************************************  [ $NET.* ]  *******/
 NET: {
-	URL: null, URLS: ['//stage.larval.com', '//stage.larval.net', '//stage.larval.org'],
+	URL: null, URLS: ['//bid.larval.com'],
 
 	setup: () => ($M(/^[/#]*(https?|ipfs|ipns)[/=?]+([a-z0-9_.:-]+)\/?$/i,location.hash?location.hash:location.pathname) ? $NET.URLS.unshift($NET.URL=`${_M[1]}://${_M[2]}`) : $NET.orderURLSByURL(`//${$D.domain}`)) && $NET.nextURL() && $NET.getStageData(false),
 	orderURLSByURL: url => $NET.URLS=($I($NET.URLS,url)>=0 ? $NET.URLS.concat($NET.URLS.splice(0,_I)) : $NET.URLS.sort((a,b) => Math.abs(a.slice(-1).charCodeAt(0)-url.slice(-1).charCodeAt(0)) - Math.abs(b.slice(-1).charCodeAt(0)-url.slice(-1).charCodeAt(0)))),
@@ -1438,8 +1329,6 @@ NET: {
 		else if($HST.IDX >= 0 && !$TOP.ON)
 			$HST.DATA.push($cloneObject(json));
 		else {
-			if($TOP.ON && json['search'])
-				json['items'].forEach((r,i) => json['items'][i][$TSYM] = $HST.toSummaryString(json['items'][i][$THST]));
 			if(!args || !args['fromPopState'])
 				$HST.pushWithPath(json);
 			$DAT.setStage(json);
@@ -1567,10 +1456,10 @@ NFY: {
 	notify: notifyRows => {
 		$NFY.clear();
 		if($HST.DATA.length < 2) return;
-		if(!$isVisible() && typeof Notification != 'undefined' && Notification.permission == 'granted') {
-			$NFY.NOTIFICATIONS.push(new Notification('Larval - Market volatility found!', {
+		if(!$isVisible() && typeof Notification != 'undefined' && Notification.permission == 'granted' && notifyRows.length) {
+			$NFY.NOTIFICATIONS.push(new Notification('Larval - New domain bids!', {
 				icon: '/icon-192x192.png',
-				body: notifyRows.length > 0 ? 'Volatile stock(s): ' + $U(notifyRows.map(a => (typeof a[$HLT]=='string'?_char['halt']:_char[a[$PCT5]<0?'down':'up'])+a[$SYM])).join(' ') : 'Larval - Market volatility found!'
+				body: 'Domains: ' + $U(notifyRows.map(r => r[$DOM] + ' $' + r[$PRC] + (r[$LTME]*1000>Date.now() ? ('@'+$timeRemaining(r[$LTME],true)+'m') : ''))).join(' ')
 			}));
 		}
 		else 
@@ -1581,10 +1470,8 @@ NFY: {
 				$NFY.clear();
 			else if(!notifyRows[0] || !notifyRows[0][0])
 				$updateTitleWithPrefix();
-			else if($isHaltRow(notifyRows[0]))
-				$D.title = notifyRows[0][$SYM] + ' | ' + (notifyRows[0][$HLT]?notifyRows[0][$HLT]:'HALTED');
 			else
-				$D.title = notifyRows[0][$SYM] + ' | ' + _char[notifyRows[0][$PCT5]<0?'down':'up'] + $N(Math.abs(notifyRows[0][$PCT5]),2) + '% | ' + _char[notifyRows[0][$PCT]<0?'down':'up'] + $N(Math.abs(notifyRows[0][$PCT]),2) + '%';
+				$D.title = notifyRows[0][$DOM] + ' | $' + notifyRows[0][$PRC] + (notifyRows[0][$LTME]*1000>Date.now() ? (' | '+$timeRemaining(notifyRows[0][$LTME],true)+'m') : '');
 			notifyRows.push(notifyRows.shift());
 		}, 1000);
 		$NFY.playAudio(_audioAlert, true);
@@ -1755,7 +1642,7 @@ TOP: {
 				const row = JSON.parse(e.data);
 				if(!$DAT.LAST || !row || !row.length || !$DAT.DATA.items.unshift(row) || !$ANI.COMPLETE)
 					return;
-				$E('l_content_table').insertRow(1).innerHTML = `<tr class="l_stocks" data-ref="0">
+				$E('l_content_table').insertRow(1).innerHTML = `<tr class="l_bids" data-ref="0">
 					<td class="l_top_user" title="${$H(row[$TUSR])}"><i>${$GUI.cell(row,$TUSR)}</i></td>
 					<td>${$GUI.cell(row,$TSYM)}</td>
 					<td>${$GUI.cell(row,$TRAT)}</td>
@@ -1794,6 +1681,8 @@ multiplierFormat: (number, digits, approx) => {
 	}
 	return(approx ? '~'+(Math.ceil(number/100)*100).toString() : number.toString());
 },
+timeRemaining: (epoch, intMode) => Math.floor((epoch-(Date.now()/1000))/60) + (intMode?0:'&nbsp;minutes'),
+dateFormat: epoch => new Date(epoch*1000).toLocaleString('en-US',{month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hour12:true}).replace(/\s+/g,'').replace(/,/,'&nbsp;@&nbsp;'),
 multiplierExplicit: (value, multiplier, precision) => _multipliers[multiplier] ? ((value/_multipliers[multiplier]).toFixed(precision) + multiplier) : value,
 htmlPercent: (number, precision) => number ? ($N(Math.abs(number), precision) + $F(number>0?'f_l_up':'f_l_down')) : $F('f_empty_cell'),
 scrollToTop: smooth => ($W.scrollY ? $W.scrollTo({top: 0, behavior: smooth?'smooth':'auto'}) : false) !== false,
