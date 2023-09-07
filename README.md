@@ -1,2 +1,2 @@
 # larval.bid
-Tracking domain auctions.
+Tracking bids on domain auction sites.
