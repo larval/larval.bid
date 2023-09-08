@@ -15,7 +15,7 @@ _symbolsStatic: ['^VIX', '^DJI', '^GSPC', '^IXIC', '^RUT', '^TNX', '^TYX'],
 _assetTypes: ['l_bids'],
 _char: { 'up':"\u25b2 ", 'down':"\u25bc ", 'updown':"\u21c5 ", 'warning':"\u26a0 ", 'halt':"\u25a0 ", 'etf':"~", 'crypto':"*", 'futures':'^', 'currency':"$", 'user':"@" },
 _themes: {
-	'default':    ['#FAAD69','#FCE4BD','#DEA876','#FF9A3D','#7AFFED','#55B8FA','#302D2A','#363330','#3C3936','#006A82','#96EBFF','#D4F3FA','#96EBFF','#00AA00','#FFCF85','#FF0000','#FFCF85','#DEB28C','#E6F6FA']
+	'default':    ['#FAAD69','#FCE4BD','#DEA876','#FF9A3D','#7AFFED','#55B8FA','#302D2A','#363330','#3C3936','#006A82','#96EBFF','#D4F3FA','#96EBFF','#00AA00','#D4F3FA','#FF0000','#FAB45F','#DEB28C','#E6F6FA']
 }, _theme: '', _themeBGColorIndex: 7,
 _keyMap: {
 	'DD': ['https://www.dynadot.com/market/auction/@'],
@@ -984,7 +984,7 @@ GUI: {
 			let rowClass=rowType, notifyControl='', historyClass=($TOP.LOG?'':'l_history_toggle'), [tld,domain]=row[$DOM].split('.').reverse();
 			if(typeof _settings['l_tld_'+tld] == 'undefined')
 				tld = 'else';
-			notify = (!notifyExcept && isOnTop && _settings['l_tld_'+tld] && (!_settings['l_range_bids']||_settings['l_range_bids']>=row[$BID]) && (!_settings['l_range_mins']||_settings['l_range_mins']>=$timeRemaining(row[$TME],true)) && (!_settings['l_range_len']||_settings['l_range_len']>=domain.length) && !(!_settings['l_numbers']&&domain.match(/[0-9]/)) && !(!_settings['l_hyphens']&&domain.match('-')));
+			notify = (!notifyExcept && isOnTop && _settings['l_tld_'+tld] && (!_settings['l_range_bids']||_settings['l_range_bids']>=row[$BID]) && (!_settings['l_range_mins']||_settings['l_range_mins']>=$minutesRemaining(row[$TME])) && (!_settings['l_range_len']||_settings['l_range_len']>=domain.length) && !(!_settings['l_numbers']&&domain.match(/[0-9]/)) && !(!_settings['l_hyphens']&&domain.match('-')));
 			if(notify) {
 				rowClass += ` l_notify_top_up`;
 				notifyControl = $F('f_class_title_display', ['l_notify_disable', `Disable ${$GUI.cell(row,$DOM)} notifications for today`, 'x']);
@@ -1009,10 +1009,10 @@ GUI: {
 				<td class="l_static">${$GUI.cellRollover(row,$DOM,-1,true)}</td>
 				<td>${$GUI.cell(row,$AGE)}</td>
 				<td>${$GUI.cell(row,$TRF)}</td>
-				<td class="l_history_toggle">${$GUI.cellRollover(row,$BID,$LBID)}</td>
-				<td class="l_history_toggle">${$GUI.cellRollover(row,$PRC,$LPRC)}</td>
-				<td class="l_history_toggle">${$GUI.cellRollover(row,$TMU,$LTMU)}</td>
-				<td class="l_history_toggle">${$GUI.cellRollover(row,$TME,$LTME)}</td>
+				<td>${$GUI.cellRollover(row,$BID,$LBID)}</td>
+				<td>${$GUI.cellRollover(row,$PRC,$LPRC)}</td>
+				<td>${$GUI.cellRollover(row,$TMU,$LTMU)}</td>
+				<td>${$GUI.cellRollover(row,$TME,$LTME)}</td>
 				</tr>`;
 			if(visibleRows >= 0 && $GUI.TABLE_SOFT_LIMIT > 0 && ++visibleRows >= $GUI.TABLE_SOFT_LIMIT)
 				visibleRows = -1;
@@ -1291,12 +1291,7 @@ MRQ: {
 		$MRQ.INTERVAL = setInterval($MRQ.update, $MRQ.lengthToSeconds(true));
 	},
 	hotKeyHelp: () => {
-		let key, match, html=`${$F('f_marquee_blink')} The following hotkeys and gestures are available: ${_F} Use the <i class="l_marquee_alt">tab</i> key to toggle the site mode. ${_F} Use the <i class="l_marquee_alt">backslash</i> key to alternate animation modes. ${_F} Alt-click rows or use the <i class="l_marquee_alt">~</i> key to keep specific symbols on top. ${_F} Swipe or use <i class="l_marquee_alt">&#8644;</i> arrow keys to rewind and navigate your backlog history. ${_F} Use <i class="l_marquee_alt">&#8645;</i> arrow keys to navigate to a row followed by selecting one of these hotkeys: `;
-		for(let key in _keyMap) {
-			if((match=_keyMap[key][$KSTK].match(/([a-z]+)\.[a-z]+\//i)))
-				html += `<div class="l_marquee_info" data-ref="${key}"><i class='l_marquee_alt_padded'>${key}</i>${$H(match[1])}</div> `
-		}
-		html += `${_F} Hold down the <i class="l_marquee_alt">shift</i> key to make your selection permanent. ${_F} The keys <i class="l_marquee_alt">1-7</i> can be used to sort by each column.`;
+		let key, match, html=`${$F('f_marquee_blink')} The following hotkeys and gestures are available: ${_F} Use the <i class="l_marquee_alt">tab</i> key to alternate animation modes, hold <i class="l_marquee_alt">shift</i> to make it permanent. ${_F} Swipe or use <i class="l_marquee_alt">&#8644;</i> arrow keys to rewind and navigate your backlog history. ${_F} Use <i class="l_marquee_alt">&#8645;</i> arrow keys to navigate to a row and hit enter to view. ${_F} The keys <i class="l_marquee_alt">1-8</i> can be used to sort by each column.`;
 		$scrollToTop();
 		$MRQ.initiate(html);
 		$MRQ.intervalReset();
@@ -1459,7 +1454,7 @@ NFY: {
 		if(!$isVisible() && typeof Notification != 'undefined' && Notification.permission == 'granted' && notifyRows.length) {
 			$NFY.NOTIFICATIONS.push(new Notification('Larval - New domain bids!', {
 				icon: '/icon-192x192.png',
-				body: 'Domains: ' + $U(notifyRows.map(r => r[$DOM] + ' $' + r[$PRC] + (r[$LTME]*1000>Date.now() ? ('@'+$timeRemaining(r[$LTME],true)+'m') : ''))).join(' ')
+				body: $U(notifyRows.map(r => r[$DOM] + ' $' + r[$PRC] + (r[$LTME]*1000>Date.now() ? ('@'+$minutesRemaining(r[$LTME])+'m') : ''))).join(' ')
 			}));
 		}
 		else 
@@ -1471,7 +1466,7 @@ NFY: {
 			else if(!notifyRows[0] || !notifyRows[0][0])
 				$updateTitleWithPrefix();
 			else
-				$D.title = notifyRows[0][$DOM] + ' | $' + notifyRows[0][$PRC] + (notifyRows[0][$LTME]*1000>Date.now() ? (' | '+$timeRemaining(notifyRows[0][$LTME],true)+'m') : '');
+				$D.title = notifyRows[0][$DOM] + ' | $' + notifyRows[0][$PRC] + (notifyRows[0][$LTME]*1000>Date.now() ? (' | '+$minutesRemaining(notifyRows[0][$LTME])+'m') : '');
 			notifyRows.push(notifyRows.shift());
 		}, 1000);
 		$NFY.playAudio(_audioAlert, true);
@@ -1681,7 +1676,11 @@ multiplierFormat: (number, digits, approx) => {
 	}
 	return(approx ? '~'+(Math.ceil(number/100)*100).toString() : number.toString());
 },
-timeRemaining: (epoch, intMode) => Math.floor((epoch-(Date.now()/1000))/60) + (intMode?0:'&nbsp;minutes'),
+timeRemaining: epoch => {
+	let mins=$minutesRemaining(epoch), absMins=Math.abs(mins);
+	return((absMins>60?Math.floor(absMins/60)+'hr&nbsp;':'')+(absMins%60)+'min&nbsp;'+(mins<0?'ago':'left'));
+},
+minutesRemaining: epoch => Math.floor((epoch-(Date.now()/1000))/60),
 dateFormat: epoch => new Date(epoch*1000).toLocaleString('en-US',{month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hour12:true}).replace(/\s+/g,'').replace(/,/,'&nbsp;@&nbsp;'),
 multiplierExplicit: (value, multiplier, precision) => _multipliers[multiplier] ? ((value/_multipliers[multiplier]).toFixed(precision) + multiplier) : value,
 htmlPercent: (number, precision) => number ? ($N(Math.abs(number), precision) + $F(number>0?'f_l_up':'f_l_down')) : $F('f_empty_cell'),

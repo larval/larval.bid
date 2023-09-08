@@ -643,7 +643,6 @@ i { font-style: normal !important; }
 #l_content_table tr td .l_hover_container  { position: relative; }
 #l_content_table tr td .l_hover_active {
 	font-style: italic;
-	text-decoration: underline;
 	color: var(--l-color-9);
 	display: none;
 	position: absolute;
@@ -653,7 +652,6 @@ i { font-style: normal !important; }
 }
 #l_content_table tr td.l_news i.l_hover_active, #l_content_table tr td.l_twit i.l_hover_active {
 	font-style: italic;
-	text-decoration: underline;
 	color: var(--l-color-9);
 	display: none;
 	position: absolute;
@@ -1118,9 +1116,6 @@ input[type=checkbox]:checked:disabled + label:before {
 		border-color: #666;
 		box-shadow: 0 0 10px #666;
 		cursor: pointer;
-	}
-	#l_content_table tr:hover:not(:first-child) td:not(.l_history), #l_content_table .l_tr_keyrow_selected:not(:first-child) td:not(.l_history), #l_content_table tr:hover td.l_static i.l_hover_inactive, #l_content_table .l_tr_keyrow_selected td.l_static i.l_hover_inactive {
-		text-decoration: underline;
 	}
 	#l_content_table tr:hover .l_history_toggle, td.l_news:hover, td.l_twit:hover  {
 		background-color: var(--l-color-11) !important;
