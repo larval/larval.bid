@@ -521,7 +521,7 @@ ANI: {
 			$W.requestAnimationFrame($ANI.disableIfUnderFPS);
 		else if($GUI.FRAMES.duration > 0 && ($GUI.FRAMES.frames/$GUI.FRAMES.duration) < $GUI.FRAMES.fps) {
 			$ANI.toggle(false, null);
-			$MRQ.flash('Slow graphics detected, disabling most animations.  Use the <i>backslash</i> key to re-enable.');
+			$MRQ.flash('Slow graphics detected, disabling most animations.  Use the <i>tab</i> key to re-enable.');
 			$removeFunction('ANI', 'disableIfUnderFPS');
 		}
 		else if(--$GUI.FRAMES.attempt > 0) {
