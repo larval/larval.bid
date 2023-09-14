@@ -692,6 +692,7 @@ i { font-style: normal !important; }
 	position: relative;
 }
 #l_content_table tr td:nth-child(2) { text-align: left; }
+#l_content_table tr td:nth-child(8) { overflow: hidden !important; }
 .l_stage_only #l_content_table tr td:nth-child(2) { word-break: break-all; }
 .l_top_only #l_content_table tr td:nth-child(2) { word-break: keep-all; }
 .l_top_only #l_content_table u { 
