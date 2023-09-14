@@ -120,8 +120,8 @@ _enumMap: {
 		'TME':_   => $dateFormat(_.val),
 		'LBID':_  => _.val ? ('+'+(_.row[$BID]-_.val<0?0:_.row[$BID]-_.val)) : 0,
 		'LPRC':_  => _.val ? ('+$'+$N(Math.abs(_.row[$PRC]-_.val),2)) : 0,
-		'LTMU':_  => $timeRemaining(_.row[$TMU]),
-		'LTME':_  => $timeRemaining(_.row[$TME]),
+		'LTMU':_  => $timeRemaining(_.row[$TMU],true),
+		'LTME':_  => $timeRemaining(_.row[$TME],true),
 		'KSTK':0, 'KETF':0, 'KCRP':1, 'KFTR':2, 'KCUR':3, 'KUSR':4,
 		'WAUD':0, 'WNOT':1, 'HLT':2, 'REL':8
 	},
@@ -849,6 +849,7 @@ GUI: {
 					_keyMap[key][type] = _keyMap[$GUI.KEY_MAP_IDX_DEFAULT][type];
 			}
 		}
+		setInterval($GUI.dynamicUpdate, 60000);
 	},
 	setStage: set => {
 		$TOP.ON = (set=='top');
@@ -980,11 +981,11 @@ GUI: {
 			$NFY.clear();
 
 		while((indices.length > 0 && (i=r=indices.pop())) || ++i < $DAT.DATA['items'].length) {
-			const row=$DAT.DATA['items'][i], rowType='l_bids', isStock=(_I<0), notifyExcept=($I($NFY.EXCEPTIONS,row[$DOM])>=0), isOnTop=row[$AID][0]=='+';
+			const row=$DAT.DATA['items'][i], rowType='l_bids', isStock=(_I<0), notifyExcept=($I($NFY.EXCEPTIONS,row[$DOM])>=0), isOnTop=(row[$AID][0]=='+'), minutesRemaining=$minutesRemaining(row[$TME]);
 			let rowClass=rowType, notifyControl='', historyClass=($TOP.LOG?'':'l_history_toggle'), [tld,domain]=row[$DOM].split('.').reverse();
 			if(typeof _settings['l_tld_'+tld] == 'undefined')
 				tld = 'else';
-			notify = (!notifyExcept && isOnTop && _settings['l_tld_'+tld] && (!_settings['l_range_bids']||_settings['l_range_bids']>=row[$BID]) && (!_settings['l_range_mins']||_settings['l_range_mins']>=$minutesRemaining(row[$TME])) && (!_settings['l_range_len']||_settings['l_range_len']>=domain.length) && !(!_settings['l_numbers']&&domain.match(/[0-9]/)) && !(!_settings['l_hyphens']&&domain.match('-')));
+			notify = (!notifyExcept && isOnTop && _settings['l_tld_'+tld] && (!_settings['l_range_bids']||_settings['l_range_bids']>=row[$BID]) && (!_settings['l_range_mins']||_settings['l_range_mins']>=minutesRemaining) && (!_settings['l_range_len']||_settings['l_range_len']>=domain.length) && !(!_settings['l_numbers']&&domain.match(/[0-9]/)) && !(!_settings['l_hyphens']&&domain.match('-')));
 			if(notify) {
 				rowClass += ` l_notify_top_up`;
 				notifyControl = $F('f_class_title_display', ['l_notify_disable', `Disable ${$GUI.cell(row,$DOM)} notifications for today`, 'x']);
@@ -1012,7 +1013,7 @@ GUI: {
 				<td>${$GUI.cellRollover(row,$BID,$LBID)}</td>
 				<td>${$GUI.cellRollover(row,$PRC,$LPRC)}</td>
 				<td>${$GUI.cellRollover(row,$TMU,$LTMU)}</td>
-				<td>${$GUI.cellRollover(row,$TME,$LTME)}</td>
+				<td>${$GUI.cellRollover(row,minutesRemaining<60?$LTME:$TME,minutesRemaining<60?$TME:$LTME)}</td>
 				</tr>`;
 			if(visibleRows >= 0 && $GUI.TABLE_SOFT_LIMIT > 0 && ++visibleRows >= $GUI.TABLE_SOFT_LIMIT)
 				visibleRows = -1;
@@ -1038,11 +1039,8 @@ GUI: {
 				noResults += `: If applicable, your query will be added to the queue. (see: <a href="//${_M[1]}">${_M[1]}</a>)`;
 			html += $F('f_no_results_row', [noResults]);
 		}
-		else {
-//			for(let key of Object.keys(onTop))
-//				html += onTop[key];
+		else
 			html += htmlPriority + htmlNew + htmlNormal;
-		}
 		$E('l_more').className = $GUI.TABLE_SOFT_LIMIT > 0 ? 'l_more' : 'l_no_more';
 		$E('l_content_table').className = $E('l_awaiting_data') ? '' : 'l_content_tr_fade_in';
 		if(doNotify && !$isSafari())
@@ -1059,6 +1057,16 @@ GUI: {
 			$NFY.notify(notifyRows);
 		if(typeof $DAT.DATA['highlight']=='number')
 			$HST.dropDownToggle($DAT.DATA['highlight']);
+	},
+	dynamicUpdate: () => {
+		if(!$C('l_update'))
+			return;
+		for(c in _C) {
+			const el = _C[c];
+			if(!el || !el.dataset || !el.dataset.trUpdate)
+				continue;
+			el.innerHTML = $timeRemaining(el.dataset.trUpdate);
+		}
 	}
 },
 
@@ -1676,9 +1684,9 @@ multiplierFormat: (number, digits, approx) => {
 	}
 	return(approx ? '~'+(Math.ceil(number/100)*100).toString() : number.toString());
 },
-timeRemaining: epoch => {
+timeRemaining: (epoch, updatable) => {
 	let mins=$minutesRemaining(epoch), absMins=Math.abs(mins);
-	return((absMins>60?Math.floor(absMins/60)+'hr&nbsp;':'')+(absMins%60)+'min&nbsp;'+(mins<0?'ago':'left'));
+	return((updatable?`<span class="l_update" data-tr-update="${epoch}">`:'')+(absMins>60?Math.floor(absMins/60)+'hr&nbsp;':'')+(absMins%60)+'min&nbsp;'+(mins<0?'ago':'left')+(updatable?'</span>':''));
 },
 minutesRemaining: epoch => Math.floor((epoch-(Date.now()/1000))/60),
 dateFormat: epoch => new Date(epoch*1000).toLocaleString('en-US',{month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hour12:true}).replace(/\s+/g,'').replace(/,/,'&nbsp;@&nbsp;'),
