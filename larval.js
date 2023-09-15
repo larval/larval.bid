@@ -1688,10 +1688,10 @@ multiplierFormat: (number, digits, approx) => {
 },
 timeRemaining: (epoch, updatable) => {
 	let mins=$minutesRemaining(epoch), absMins=Math.abs(mins);
-	return((updatable?`<span class="l_update${mins<0?' l_past':''}" data-tr-update="${epoch}">`:'')+(absMins>60?Math.floor(absMins/60)+'hr&nbsp;':'')+(absMins%60)+'min&nbsp;'+(mins<0?'ago':'left')+(updatable?'</span>':''));
+	return((updatable?`<span class="l_update${mins<0?' l_past':''}" data-tr-update="${epoch}">`:'')+(absMins>=60?Math.floor(absMins/60)+'hr&nbsp;':'')+(absMins%60)+'min&nbsp;'+(mins<0?'ago':'left')+(updatable?'</span>':''));
 },
 minutesRemaining: epoch => Math.floor((epoch-(Date.now()/1000))/60),
-dateFormat: (epoch, strict) => new Date(epoch*1000).toLocaleString('en-US', (strict||$minutesRemaining(epoch)>60) ? {month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hour12:true} : {hour:'2-digit',minute:'2-digit',hour12:true}).replace(/\s+/g,'').replace(/,/,'&nbsp;@&nbsp;'),
+dateFormat: (epoch, strict) => new Date(epoch*1000).toLocaleString('en-US', (strict||$minutesRemaining(epoch)>=60) ? {month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hour12:true} : {hour:'2-digit',minute:'2-digit',hour12:true}).replace(/\s+/g,'').replace(/,/,'&nbsp;@&nbsp;'),
 multiplierExplicit: (value, multiplier, precision) => _multipliers[multiplier] ? ((value/_multipliers[multiplier]).toFixed(precision) + multiplier) : value,
 htmlPercent: (number, precision) => number ? ($N(Math.abs(number), precision) + $F(number>0?'f_l_up':'f_l_down')) : $F('f_empty_cell'),
 scrollToTop: smooth => ($W.scrollY ? $W.scrollTo({top: 0, behavior: smooth?'smooth':'auto'}) : false) !== false,
