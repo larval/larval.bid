@@ -70,6 +70,7 @@ _clickMap: {
 	'l_marquee_flash':_         => $HST.gotoStageData(0),
 	'l_marquee_info':_          => $DAT.setURLFormat(_.sym, false),
 	'l_marquee_talk':_          => $TOP.searchFromURL(_.raw, true),
+	'l_menu_link':_             => $GUI.menuClick(_.el.innerText),
 	'l_news':_                  => typeof $DAT.DATA['items'][_.idx][$LNK]=='number' ? $GUI.relatedToggle(_.idx) : $W.open($DAT.DATA['items'][_.idx][$LNK], `l_news_${_.sym}`, _extURLOptions),
 	'l_notify_disable':_        => $NFY.exception($DAT.DATA['items'][_.idx][$DOM], true),
 	'l_notify_enable':_         => $NFY.exception($DAT.DATA['items'][_.idx][$DOM], false),
@@ -865,6 +866,14 @@ GUI: {
 		$GUI.setTheme('random');
 		$MRQ.flash(message, false, 20000);
 	},
+	menuClick: sub => {
+		if($I(['www','top'],!$TOP.LOG&&$DAT.MODE!='bid'?sub:null) >= 0) {
+			if(!_I ^ !$TOP.ON)
+				$DAT.toggleStage(true);
+		}
+		else
+			location.href = `//${sub}.${$M(/[^.]+\.[A-Z0-9]+$/i,$D.domain)?_M[0]:'larval.com'}`;
+	},
 	broadBehaviorToggle: topMode => {
 		if(!$ANI.COMPLETE)
 			$ANI.fastSplash(true);
@@ -898,6 +907,8 @@ GUI: {
 		$DAT.DATA = $DAT.vpmStage($DAT.DATA);
 		$GUI.contentTableUpdate();
 	},
+	getMenu: () => $E('l_menu_left').innerHTML,
+	setMenu: items => (items&&items.length) ? ($E('l_menu_left').innerHTML = $E('l_menu_right').innerHTML = items.map(x => `<span class="l_menu_link">${x}</span>`).join('')) : null,
 	setSpread: spreads => {
 		const items=(spreads?spreads.map(x => `<div class="${x[2]?'l_spread_link':'l_spread_nolink'}" data-ref="${x[2]?x[2]:''}" style="border-image:linear-gradient(90deg, var(--l-color-3) ${x[1]-1}%, var(--l-color-6) ${x[1]}%, var(--l-color-5) ${x[1]+1}%) 1 1">${$H(x[0])}</div>`):[]);
 		$E('l_spread').style.opacity = items.length ? '1' : '0.25';
@@ -1211,6 +1222,8 @@ MRQ: {
 				$MRQ.HIGHLIGHT = $DAT.LAST;
 			}
 		}
+		if($DAT.DATA && $DAT.DATA['menu'] && $DAT.DATA['menu'].length && !$GUI.getMenu())
+			setTimeout(() => $GUI.setMenu($DAT.DATA['menu']), 500);
 	},
 	update: (resetInterval, passive) => {
 		if(!$ANI.COMPLETE || !$DAT.DATA || $TOP.LOG || !$DAT.DATA['marquee'] || $DAT.DATA['marquee'].length < 2 || (!$TOP.ON&&passive&&$E('l_marquee_about')))

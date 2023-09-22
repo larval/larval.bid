@@ -260,6 +260,42 @@ i { font-style: normal !important; }
 	box-shadow: 0px 10px 5px #111;
 	user-select: none;
 }
+#l_menu_left, #l_menu_right {
+	display: block;
+	position: absolute;
+	bottom: 0;
+	height: 100%;
+	width: auto;
+	color: var(--l-color-1);
+	text-align: center;
+	font-size: 18px;
+	font-variant: small-caps;
+	writing-mode: vertical-rl; 
+	user-select: none;
+	letter-spacing: 1px;
+	text-shadow: 2px 2px 0 #000;
+	z-index: 0;
+	transition: all 0.35s ease;
+	box-shadow: 5px 0px 0px 0px rgba(0,0,0,0.3), 10px 0px 0px 0px rgba(0,0,0,0.1);
+}
+#l_menu_left { left: -500px; }
+#l_menu_right {
+	right: -500px;
+	transform: rotate(180deg);
+}
+#l_menu_left span, #l_menu_right span {
+	display: block;
+	padding: 2px 10px 0px 12px;
+	border-right: 2px solid var(--l-color-1);
+}
+#l_menu_left span {
+	border-image: linear-gradient(to bottom, var(--l-color-2), rgba(0,0,0,0)) 1 100%;
+	background: linear-gradient(45deg, var(--l-color-6) 0%, rgba(0,0,0,1) 100%);
+}
+#l_menu_right span {
+	border-image: linear-gradient(to top, var(--l-color-2), rgba(0,0,0,0)) 1 100%;
+	background: linear-gradient(135deg, var(--l-color-6) 0%, rgba(0,0,0,1) 100%);
+}
 #l_afterhours_left, #l_afterhours_right {
 	display: none;
 	position: absolute;
@@ -1027,7 +1063,7 @@ input[type="checkbox"] {
 	max-height: 100px !important;
 }
 .l_scrolled #l_logo { transform: scale(0.5) !important; }
-.l_scrolled #l_afterhours_left, .l_scrolled #l_afterhours_right { height: 72px !important; }
+.l_scrolled #l_afterhours_left, .l_scrolled #l_afterhours_right, .l_scrolled #l_menu_left, .l_scrolled #l_menu_right { height: 72px !important; }
 .l_not_scrolled {
 	top: 0 !important;
 	max-height: none !important;
@@ -1115,6 +1151,15 @@ input[type=checkbox]:checked:disabled + label:before {
 	}
 	.l_top_only .l_marquee_warning a:hover { border-bottom: 2px solid var(--l-color-0); }
 	.l_stage_only .l_marquee_warning span, .l_marquee_talk span { cursor: pointer; }
+	#l_menu_left span:hover, #l_menu_right span:hover {
+		background: linear-gradient(45deg, var(--l-color-8) 0%, rgba(0,0,0,1) 100%);
+		color: var(--l-color-3);
+		letter-spacing: 0.25em;
+		transition: 0.25s;
+	}
+	#l_menu_right span:hover { background: linear-gradient(135deg, var(--l-color-8) 0%, rgba(0,0,0,1) 100%); }
+	.l_animations_complete #l_fixed:hover #l_menu_left { left: 0px; }
+	.l_animations_complete #l_fixed:hover #l_menu_right  { right: 0px; }
 	#l_settings_button:hover { background: linear-gradient(180deg, var(--l-color-17) 75%, #333 90%); }
 	#l_content_table tr:hover:not(:first-child), #l_content_table .l_tr_keyrow_selected:not(:first-child) {
 		outline: none;
