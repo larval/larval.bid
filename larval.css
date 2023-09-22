@@ -1273,7 +1273,7 @@ input[type=checkbox]:checked:disabled + label:before {
 		padding-right: 5px;
 	}
 	#l_last_update { font-size: 10px; }
-	#l_spread_container, .l_notify_popout, .l_notify_disable, .l_notify_enable, .l_content_table_header i { display: none; }
+	#l_menu_left, #l_menu_right, #l_spread_container, .l_notify_popout, .l_notify_disable, .l_notify_enable, .l_content_table_header i { display: none; }
 	#l_bids_ah span { font-size: 5px !important; }
 	.l_tab { font-size: 9px !important; }
 	.l_tab_info { padding: 10px 3px 10px 3px !important; }
