@@ -1096,7 +1096,7 @@ input[type="checkbox"] {
 #l_nam .l_notify_down, #l_nam .l_notify_top_down { background-color: var(--l-color-16) !important; }
 #l_nam .l_notify_halt { background-color: var(--l-color-10) !important; }
 .l_nam #l_content_table tr:not(.l_notify_up):not(.l_notify_down):not(.l_notify_top_up):not(.l_notify_top_down):not(.l_top_highlight) .l_history_toggle  { background-color: var(--l-color-18) !important; }
-.l_stage #l_afterhours_left, .l_stage #l_afterhours_right { color: #FFDE96 !important; }
+.l_stage #l_afterhours_left, .l_stage #l_afterhours_right, .l_stage .l_menu_link { color: #FFDE96 !important; }
 .l_stage #l_logo_worm_eye, .l_stage .l_logo_letter_o  { fill: #FFDE96 !important; }
 input[type=checkbox] + label {
 	display: inline-block;

@@ -872,7 +872,7 @@ GUI: {
 				$DAT.toggleStage(true);
 		}
 		else
-			location.href = `//${sub}.${$M(/[^.]+\.[A-Z0-9]+$/i,$D.domain)?_M[0]:'larval.com'}`;
+			location.href = `//${sub=='www'?'':sub+'.'}${$M(/(stage\.)?[^.]+\.[A-Z0-9]+$/i,$D.domain)?_M[0]:'larval.com'}`;
 	},
 	broadBehaviorToggle: topMode => {
 		if(!$ANI.COMPLETE)
