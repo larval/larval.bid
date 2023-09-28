@@ -867,12 +867,9 @@ GUI: {
 		$MRQ.flash(message, false, 20000);
 	},
 	menuClick: sub => {
-		if($I(['www','top'],!$TOP.LOG&&$DAT.MODE!='bid'?sub:null) >= 0) {
-			if(!_I ^ !$TOP.ON)
-				$DAT.toggleStage(true);
-		}
-		else
-			location.href = `//${sub=='www'?'':sub+'.'}${$M(/(stage\.)?[^.]+\.[A-Z0-9]+$/i,$D.domain)?_M[0]:'larval.com'}`;
+		const url=`//${sub=='www'?'':sub+'.'}${$M(/(stage\.)?[^.]+\.[A-Z0-9]+$/i,$D.domain)?_M[0]:'larval.com'}`, win=$W.open(url,sub);
+		if(win) win.focus();
+		else location.href = url;
 	},
 	broadBehaviorToggle: topMode => {
 		if(!$ANI.COMPLETE)
