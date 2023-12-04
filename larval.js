@@ -1473,7 +1473,7 @@ NFY: {
 		if($HST.DATA.length < 2) return;
 		if(!$isVisible() && typeof Notification != 'undefined' && Notification.permission == 'granted' && notifyRows.length) {
 			$NFY.NOTIFICATIONS.push(new Notification('Larval - New domain bids!', {
-				icon: '/icon-192x192.png',
+				icon: $A('link') && Array.from(_A).find(l => l.rel==($isSafari()?'apple-touch-icon':'icon')).href,
 				body: $U(notifyRows.map(r => r[$DOM] + ' $' + r[$PRC] + (r[$LTME]*1000>Date.now() ? ('@'+$minutesRemaining(r[$LTME])+'m') : ''))).join(' ')
 			}));
 		}
