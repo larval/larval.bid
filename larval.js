@@ -846,7 +846,7 @@ GUI: {
 		}
 		setInterval($GUI.dynamicUpdate, 60000);
 	},
-	setStage: set => $GUI.MAP = $GUI.MAPS[$DAT.MODE=set],
+	setStage: set => ($GUI.MAP=$GUI.MAPS[$DAT.MODE=set]) && (_title=document.title),
 	forceRedraw: el => el && (el.style.transform='translateZ(0)') && void el.offsetHeight,
 	setTheme: name => (_theme!=name && _themes[name] && _themes[_theme=name].forEach((color,i) => $D.body.style.setProperty(`--l-color-${i}`,color))),
 	getThemeMode: prefix => $DAT.DATA ? ((prefix?prefix:'') + (['afterhours','bloodbath','top'].find(key => $DAT.DATA[key]) || 'default')) : null,
