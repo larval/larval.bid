@@ -2,7 +2,7 @@
 | | .'|  _| | | .'| |  (: An excuse to escape into the nostalgia of slapping something together agian :)
 |_|__,|_|  \_/|__,|*/
 
-const $L = { _components: ['EVT', 'CFG', 'GUI', 'HST', 'DAT', 'NFY', 'NET', 'ANI', 'MRQ', 'POL', 'TOP'],
+const $L = { _components: ['EVT', 'ASK', 'CFG', 'GUI', 'HST', 'DAT', 'NFY', 'NET', 'ANI', 'MRQ', 'POL', 'TOP'],
 _title:	'',
 _titlePrefix: '',
 _wakeLock: null,
@@ -15,7 +15,8 @@ _symbolsStatic: ['^VIX', '^DJI', '^GSPC', '^IXIC', '^RUT', '^TNX', '^TYX'],
 _assetTypes: ['l_bids'],
 _char: { 'up':"\u25b2 ", 'down':"\u25bc ", 'updown':"\u21c5 ", 'warning':"\u26a0 ", 'halt':"\u25a0 ", 'etf':"~", 'crypto':"*", 'futures':'^', 'currency':"$", 'user':"@" },
 _themes: {
-	'default':    ['#FAAD69','#FCE4BD','#DEA876','#FF9A3D','#7AFFED','#55B8FA','#302D2A','#363330','#3C3936','#006A82','#96EBFF','#D4F3FA','#96EBFF','#00AA00','#D4F3FA','#FF0000','#FAB45F','#DEB28C','#E6F6FA']
+	'default':    ['#FAAD69','#FCE4BD','#DEA876','#FF9A3D','#7AFFED','#55B8FA','#302D2A','#363330','#3C3936','#006A82','#96EBFF','#D4F3FA','#96EBFF','#00AA00','#D4F3FA','#FF0000','#FAB45F','#DEB28C','#E6F6FA'],
+	'ask':        ['#FA6969','#FCBDBD','#DE7676','#FF773D','#7AFFAD','#55F7FA','#302D2A','#363330','#3C3936','#006A82','#96EBFF','#D4F3FA','#96EBFF','#00AA00','#D4F3FA','#FF0000','#FA905F','#DEA58C','#E6F6FA']
 }, _theme: '', _themeBGColorIndex: 7,
 _keyMap: {
 	'DD': ['https://www.dynadot.com/market/auction/@'],
@@ -126,16 +127,10 @@ _enumMap: {
 		'KSTK':0, 'KETF':0, 'KCRP':1, 'KFTR':2, 'KCUR':3, 'KUSR':4,
 		'WAUD':0, 'WNOT':1, 'HLT':2, 'REL':8
 	},
-	'top': {
-		'TUSR':_   => $H(_.val),
-		'TSYM':_   => _.val,
-		'TRAT':_   => isNaN(_.val) ? `<i data-msg-idx="${_.idx}" class="${_.val[0]=='+'?'l_top_up':'l_top_down'}">${_.val.substr(1)}</i>` : (_.val+'%'),
-		'TPCT':_   => $htmlPercent(_.val,2),
-		'TPCR':_   => $htmlPercent(_.val,2),
-		'TSTR':_   => $H(_.val),
-		'TEND':_   => $TOP.timeFormat(_.val),
-		'TTWT':_   => $H(_.val),
-		'THST':_   => void(0),
+	'ask': {
+		'ADOM':_   => $H(_.val),
+		'APRC':_   => '$'+$N(Math.abs(_.val), 2),
+		'ACHG':_   => '$'+$N(Math.abs(_.val), 2),
 		'HMID':0, 'HPRC':1, 'HMOD':2, 'HPCT':3, 'HPCR':4, 'HSTR':5, 'HEND':6, 'HILT':7
 	}
 },
@@ -250,7 +245,8 @@ EVT: {
 				sym = $DAT.DATA['items'][idx][$AID].substr(3);
 			else
 				sym = $DAT.DATA['items'][idx][$DOM];
-			$GUI.KEY_MAP_IDX = $DAT.DATA['items'][idx][$AID].substr(1,2);
+			if(!$ASK.ON)
+				$GUI.KEY_MAP_IDX = $DAT.DATA['items'][idx][$AID].substr(1,2);
 		}
 		const raw=sym;
 		if((e.ctrlKey || e.altKey || e.type=='contextmenu') && (el.dataset&&el.dataset.alt!='none'))
@@ -539,7 +535,7 @@ ANI: {
 \*******  SETTINGS & GENERAL USER CONFIGURATION  ****************************  [ $CFG.* ]  *******/
 CFG: {
 	setup: () => {
-		$GUI.setStage('bid');
+		$GUI.setStage($ASK.ON ? 'ask' : 'bid');
 		if($TOP.ON) $CFG.buttonTextToggle(false);
 		$CFG.load(false);
 	},
@@ -695,9 +691,7 @@ DAT: {
 			if(!$DAT.DATA.itemsImmutable)
 				$DAT.DATA.itemsImmutable = $cloneObject($DAT.DATA.items);
 			$DAT.DATA.items = $DAT.DATA.items.sort((a, b) => {
-				let column = Math.abs($DAT.SORT) - 1;
-				if($TOP.ON && column==$TSYM)
-					column = $THST;
+				let column = Math.abs($DAT.SORT) - ($ASK.ON?2:1);
 				if(a[column] === null || a[column] === false || a[column] === undefined)
 					return 1;
 				else if(b[column] === null || b[column] === false || b[column] === undefined)
@@ -819,7 +813,7 @@ DAT: {
 /*************************************************************************************************\
 \*******  GUI & GENERAL VIEW LOGIC  *****************************************  [ $GUI.* ]  *******/
 GUI: {
-	MAPS: {'top':[],'bid':[]}, MAP: null,
+	MAPS: {'bid':[],'ask':[]}, MAP: null,
 	KEY_MAP_IDX_DEFAULT: 'XX', KEY_MAP_IDX: null, KEY_ROW: 0,
 	TABLE_SOFT_LIMIT: 100, TABLE_ROWS_IN_VIEW: 10,
 	FRAMES: null, SWIPE_START: null,
@@ -852,12 +846,7 @@ GUI: {
 		}
 		setInterval($GUI.dynamicUpdate, 60000);
 	},
-	setStage: set => {
-		$TOP.ON = (set=='top');
-		$GUI.MAP = $GUI.MAPS[$DAT.MODE=set];
-		_title = document.title;
-		['l_stage_only','l_top_only'].forEach((cn,i) => $E('l_root').classList[i^$TOP.ON?'remove':'add'](cn));
-	},
+	setStage: set => $GUI.MAP = $GUI.MAPS[$DAT.MODE=set],
 	forceRedraw: el => el && (el.style.transform='translateZ(0)') && void el.offsetHeight,
 	setTheme: name => (_theme!=name && _themes[name] && _themes[_theme=name].forEach((color,i) => $D.body.style.setProperty(`--l-color-${i}`,color))),
 	getThemeMode: prefix => $DAT.DATA ? ((prefix?prefix:'') + (['afterhours','bloodbath','top'].find(key => $DAT.DATA[key]) || 'default')) : null,
@@ -953,7 +942,7 @@ GUI: {
 		if(!$DAT.DATA || !$ANI.COMPLETE) return;
 		$E('l_menu').className = ($ANI.COMPLETE && !$isWeekend() ? $GUI.getThemeMode('l_') : 'l_default');
 		let i=-1, r=-1, rowRules={}, notifyRows=[], indices=[], notify=false, notifyRelated=false, visibleRows=0, onTop={}, htmlRow='', htmlPriority='', htmlNew='', htmlNormal='', html='<tr>', stockAssetType='l_bids';
-		const columns = ($TOP.ON ? ['user',$TOP.LOG?'post':'symbols','bull','user%','real%','start',$TOP.LOG?'added':'end'] : ['site','domain','age','traf<i>fic</i>','bids','price','updated','end']);
+		const columns = ($ASK.ON ? ['type', 'domain','price','change'] : ['site','domain','age','traf<i>fic</i>','bids','price','updated','end']);
 		$E('l_root').classList[$DAT.DATA['locked']?'add':'remove']('l_locked');
 		if(_assetTypes[0] != stockAssetType) {
 			if($E(_assetTypes[0]))
@@ -990,7 +979,7 @@ GUI: {
 
 		while((indices.length > 0 && (i=r=indices.pop())) || ++i < $DAT.DATA['items'].length) {
 			const row=$DAT.DATA['items'][i], rowType='l_bids', isStock=(_I<0), notifyExcept=($I($NFY.EXCEPTIONS,row[$DOM])>=0), isOnTop=(row[$AID][0]=='+'), minutesRemaining=$minutesRemaining(row[$TME]);
-			let rowClass=rowType, notifyControl='', historyClass=($TOP.LOG?'':'l_history_toggle'), [tld,domain]=row[$DOM].split('.').reverse();
+			let rowClass=rowType, notifyControl='', historyClass=($TOP.LOG?'':'l_history_toggle'), [tld,domain]=row[$ASK.ON?$ADOM:$DOM].split('.').reverse();
 			if(typeof _settings['l_tld_'+tld] == 'undefined')
 				tld = 'else';
 			notify = (!notifyExcept && isOnTop && _settings['l_tld_'+tld] && (!_settings['l_range_bids']||_settings['l_range_bids']>=row[$BID]) && (!_settings['l_range_mins']||_settings['l_range_mins']>=minutesRemaining) && (!_settings['l_range_len']||_settings['l_range_len']>=domain.length) && !(!_settings['l_numbers']&&domain.match(/[0-9]/)) && !(!_settings['l_hyphens']&&domain.match('-')));
@@ -1013,16 +1002,24 @@ GUI: {
 				if(notifyRelated)
 					notify = notifyRelated;
 			}
-			htmlRow = `<tr class="${rowClass}" data-ref="${i}">
-				<td>${notifyControl}${$GUI.cell(row,$AID)}</td>
-				<td class="l_static">${$GUI.cellRollover(row,$DOM,-1,true)}</td>
-				<td>${$GUI.cell(row,$AGE)}</td>
-				<td>${$GUI.cell(row,$TRF)}</td>
-				<td>${$GUI.cellRollover(row,$BID,$LBID)}</td>
-				<td>${$GUI.cellRollover(row,$PRC,$LPRC)}</td>
-				<td>${$GUI.cellRollover(row,$TMU,$LTMU)}</td>
-				<td>${$GUI.cellRollover(row,minutesRemaining<60?$LTME:$TME,minutesRemaining<60?$TME:$LTME)}</td>
-				</tr>`;
+			if($ASK.ON)
+				htmlRow = `<tr class="${rowClass}" data-ref="${i}">
+					<td>BIN</td>
+					<td class="l_static">${$GUI.cell(row,$ADOM)}</td>
+					<td>${$GUI.cell(row,$APRC)}</td>
+					<td>${$GUI.cell(row,$ACHG)}</td>
+					</tr>`;
+			else
+				htmlRow = `<tr class="${rowClass}" data-ref="${i}">
+					<td>${notifyControl}${$GUI.cell(row,$AID)}</td>
+					<td class="l_static">${$GUI.cellRollover(row,$DOM,-1,true)}</td>
+					<td>${$GUI.cell(row,$AGE)}</td>
+					<td>${$GUI.cell(row,$TRF)}</td>
+					<td>${$GUI.cellRollover(row,$BID,$LBID)}</td>
+					<td>${$GUI.cellRollover(row,$PRC,$LPRC)}</td>
+					<td>${$GUI.cellRollover(row,$TMU,$LTMU)}</td>
+					<td>${$GUI.cellRollover(row,minutesRemaining<60?$LTME:$TME,minutesRemaining<60?$TME:$LTME)}</td>
+					</tr>`;
 			if(visibleRows >= 0 && $GUI.TABLE_SOFT_LIMIT > 0 && ++visibleRows >= $GUI.TABLE_SOFT_LIMIT)
 				visibleRows = -1;
 			else if(notify) {
@@ -1367,9 +1364,12 @@ NET: {
 				$MRQ.flash(`${$F('f_marquee_blink')}<span id="l_marquee_notify">${$DAT.DATA['notify']}</span>${_F}`, false, 8000);
 			else if($DAT.LAST && !$TOP.ON && (minsOff=Math.floor(($DAT.LAST-Date.now()/1000)/60,0)) > 9)
 				$MRQ.flash(`Your local clock is <i>${minsOff}</i> minutes ahead of the server.`);
+			else if($ASK.ON)
+				$MRQ.flash(`<i>${Math.abs(minsOff)}</i> minutes since last update.`, true, -1);
 			else if(minsOff < -9)
 				$MRQ.flash(`Server data is unexpectedly old: <i>${Math.abs(minsOff)}</i> minutes behind.`);
 			$ANI.updateFlash();
+			$GUI.setTheme($DAT.MODE);
 		}
 		if($TOP.ON && !retry) {
 			if($TOP.LOG) {
@@ -1573,7 +1573,7 @@ POL: {
 	LONG: 300, SHORT: 30, NOW: 1, EPOCH_COMPLETE: 0,
 
 	setup: () => void(0),
-	forceNextStage: force => ($TOP.ON&&!$TOP.LOG&&!force) ? $CFG.buttonToggle() : $ANI.updateFlash(0.75),
+	forceNextStage: force => $ASK.ON ? null : $ANI.updateFlash(0.75),
 	getNextSync: () => {
 		if(!$DAT.DATA || !$DAT.DATA['next'])
 			return($POL.LONG);
@@ -1583,6 +1583,8 @@ POL: {
 		return(next);
 	},
 	setNextStage: (seconds, marqueeInitiate) => {
+		if($ASK.ON)
+			return;
 		if($ANI.COMPLETE)
 			$ANI.reset('l_progress_display', `l_progress ${seconds}s linear forwards`);
 		if($DAT.TIMEOUT)
@@ -1601,6 +1603,18 @@ POL: {
 	progressReset: force => {
 		if($POL.EPOCH_COMPLETE || force)
 			$POL.setNextStage($POL.EPOCH_COMPLETE - $epochNow()); 
+	}
+},
+
+/*************************************************************************************************\
+\*******  ASK MODE LOGIC (ask.larval.com)  **********************************  [ $ASK.* ]  *******/
+ASK: {
+	ON: false,
+	setup: () => {
+		if(!($ASK.ON=location.href.match(/ask/i)))
+			return;
+		$E('l_root').classList.add('l_ask_only');
+		$MRQ.flash('Premium domain monitoring.', true, -1);
 	}
 },
 
@@ -1701,7 +1715,7 @@ timeRemaining: (epoch, updatable) => {
 	return((updatable?`<span class="l_update${mins<0?' l_past':''}" data-tr-update="${epoch}">`:'')+(absMins>=60?Math.floor(absMins/60)+'hr&nbsp;':'')+(absMins%60)+'min&nbsp;'+(mins<0?'ago':'left')+(updatable?'</span>':''));
 },
 minutesRemaining: epoch => Math.floor((epoch-(Date.now()/1000))/60),
-dateFormat: (epoch, strict) => new Date(epoch*1000).toLocaleString('en-US', (strict||$minutesRemaining(epoch)>=60) ? {month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hour12:true} : {hour:'2-digit',minute:'2-digit',hour12:true}).replace(/\s+/g,'').replace(/,/,'&nbsp;@&nbsp;'),
+dateFormat: (epoch, strict) => epoch ? (new Date(epoch*1000).toLocaleString('en-US', (strict||$minutesRemaining(epoch)>=60) ? {month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hour12:true} : {hour:'2-digit',minute:'2-digit',hour12:true}).replace(/\s+/g,'').replace(/,/,'&nbsp;@&nbsp;')) : $F('f_empty_cell'),
 multiplierExplicit: (value, multiplier, precision) => _multipliers[multiplier] ? ((value/_multipliers[multiplier]).toFixed(precision) + multiplier) : value,
 htmlPercent: (number, precision) => number ? ($N(Math.abs(number), precision) + $F(number>0?'f_l_up':'f_l_down')) : $F('f_empty_cell'),
 scrollToTop: smooth => ($W.scrollY ? $W.scrollTo({top: 0, behavior: smooth?'smooth':'auto'}) : false) !== false,

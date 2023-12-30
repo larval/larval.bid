@@ -198,7 +198,7 @@ i { font-style: normal !important; }
 	line-height: 3vmax;
 }
 .l_stage_only #l_fixed_bg0 i::before { content: '$'; }
-.l_top_only #l_fixed_bg0 i::before { content: '\2022'; }
+.l_ask_only #l_fixed_bg0 i::before { content: '\2022'; }
 #l_fixed_bg0 i:nth-child(1){ left: 15%; animation-delay: 4.9s; }
 #l_fixed_bg0 i:nth-child(2){ left: 25%; animation-delay: 5.1s; }
 #l_fixed_bg0 i:nth-child(3){ left: 35%; animation-delay: 5.3s; }
@@ -320,10 +320,10 @@ i { font-style: normal !important; }
 #l_afterhours_left span, #l_afterhours_right span { display: block; }
 #l_afterhours_left i, #l_afterhours_right i { display: none; }
 #l_afterhours_left u, #l_afterhours_right u { display: none; text-decoration: none; }
-.l_bloodbath #l_afterhours_left i, .l_bloodbath #l_afterhours_right i, .l_top_only #l_afterhours_left u, .l_top_only #l_afterhours_right u { display: block !important; }
+.l_bloodbath #l_afterhours_left i, .l_bloodbath #l_afterhours_right i, .l_ask_only #l_afterhours_left u, .l_ask_only #l_afterhours_right u { display: block !important; }
 .l_bloodbath #l_afterhours_left, .l_bloodbath #l_afterhours_right, .l_afterhours #l_afterhours_left, .l_afterhours #l_afterhours_right { display: block !important; }
-.l_bloodbath #l_afterhours_left span, .l_bloodbath #l_afterhours_right span, .l_top_only #l_afterhours_left span, .l_top_only #l_afterhours_right span { display: none !important; }
-.l_top_only.l_animations_complete #l_afterhours_left, .l_top_only.l_animations_complete #l_afterhours_right { display: block !important; }
+.l_bloodbath #l_afterhours_left span, .l_bloodbath #l_afterhours_right span, .l_ask_only #l_afterhours_left span, .l_ask_only #l_afterhours_right span { display: none !important; }
+.l_ask_only.l_animations_complete #l_afterhours_left, .l_ask_only.l_animations_complete #l_afterhours_right { display: block !important; }
 .l_animations_complete #l_afterhours_left, .l_animations_complete #l_afterhours_right { display: block !important; }
 .l_default #l_afterhours_left, .l_default #l_afterhours_right { display: none !important; }
 .l_animations_complete #l_logo.l_net_loading { opacity: 0.25 !important; }
@@ -493,11 +493,11 @@ i { font-style: normal !important; }
 	padding-right: 10px;
 	color: var(--l-color-0);
 }
-.l_top_only .l_marquee_warning i { color: var(--l-color-16); }
-.l_top_only .l_marquee_warning a { color: var(--l-color-0) !important; }
-.l_top_only .l_marquee_warning span { color: var(--l-color-10); }
-.l_top_only .l_marquee_highlight_talk i { color: var(--l-color-0) !important; }
-.l_top_only .l_marquee_alt_padded_right_talk { color: var(--l-color-10) !important; }
+.l_ask_only .l_marquee_warning i { color: var(--l-color-16); }
+.l_ask_only .l_marquee_warning a { color: var(--l-color-0) !important; }
+.l_ask_only .l_marquee_warning span { color: var(--l-color-10); }
+.l_ask_only .l_marquee_highlight_talk i { color: var(--l-color-0) !important; }
+.l_ask_only .l_marquee_alt_padded_right_talk { color: var(--l-color-10) !important; }
 .l_stage_only .l_marquee_highlight_talk i { color: var(--l-color-10) !important; }
 .l_stage_only .l_marquee_alt_padded_right_talk { color: var(--l-color-0) !important; }
 .l_stage_only .l_marquee_warning span {
@@ -734,8 +734,8 @@ i { font-style: normal !important; }
 	font-style: italic;
 }
 .l_stage_only #l_content_table tr td:nth-child(2) { word-break: break-all; }
-.l_top_only #l_content_table tr td:nth-child(2) { word-break: keep-all; }
-.l_top_only #l_content_table u { 
+.l_ask_only #l_content_table tr td:nth-child(2) { word-break: keep-all; }
+.l_ask_only #l_content_table u { 
 	color: var(--l-color-9) !important;
 	text-decoration: none;
 }
@@ -764,29 +764,29 @@ i { font-style: normal !important; }
 }
 #l_top_search:disabled { animation: l_pulsate 0.5s ease alternate infinite; }
 .l_top_searched_symbol { color: var(--l-color-9) !important; }
-.l_top_only #l_progress { display: block !important; }
-.l_top_only #l_progress_display {
+.l_ask_only #l_progress { display: block !important; }
+.l_ask_only #l_progress_display {
 	width: 100% !important;
 	margin: 0 !important;
 }
-.l_top_only #l_progress_cap_right, .l_top_only #l_progress_cap_left, .l_top_only #l_stage_about, .l_stage_only #l_top_about, .l_top_only  #l_logo_stage, .l_stage_only  #l_logo_top, .l_stage_only #l_control_table tr.l_top_row, .l_top_only #l_control_table tr.l_stage_row, .l_top_only #l_spread_container {
+.l_ask_only #l_progress_cap_right, .l_ask_only #l_progress_cap_left, .l_ask_only #l_stage_about, .l_stage_only #l_top_about, .l_ask_only  #l_logo_stage, .l_stage_only  #l_logo_top, .l_stage_only #l_control_table tr.l_top_row, .l_ask_only #l_control_table tr.l_stage_row, .l_ask_only #l_spread_container {
 	display: none;
 }
-.l_top_only #l_content_table tr td:nth-child(3) .l_history_active, .l_top_only #l_content_table tr td:nth-child(2) .l_history_active {
+.l_ask_only #l_content_table tr td:nth-child(3) .l_history_active, .l_ask_only #l_content_table tr td:nth-child(2) .l_history_active {
 	text-align: center !important;
 }
-.l_top_only .l_history_active div {
+.l_ask_only .l_history_active div {
 	margin-top: 5px;
 	margin-bottom: 5px;
 }
-.l_top_log #l_content_table tr td:nth-child(2) {
+.l_ask_only #l_content_table tr td:nth-child(2) {
 	word-break: break-all;
 	word-wrap: break-word;
 }
 .l_stage_row span { white-space: nowrap; }
 .l_stage_only .l_content_table_notify_0 tr td:nth-child(3),
-.l_top_only:not(.l_top_log) .l_content_table_notify_0 tr td:nth-child(4),
-.l_top_log .l_content_table_notify_0 tr td:nth-child(7),
+.l_ask_only:not(.l_ask_only) .l_content_table_notify_0 tr td:nth-child(4),
+.l_ask_only .l_content_table_notify_0 tr td:nth-child(7),
 .l_content_table_notify_1 tr td:nth-child(1),
 .l_content_table_notify_2 tr td:nth-child(2),
 .l_content_table_notify_3 tr td:nth-child(3),
@@ -1051,9 +1051,9 @@ input[type="checkbox"] {
 }
 #l_alt_link { cursor: pointer; }
 #l_alt_link u, #l_alt_link i { text-decoration: none; display: none; }
-.l_top_only #l_alt_link u { display: inline; }
+.l_ask_only #l_alt_link u { display: inline; }
 .l_stage_only #l_alt_link i { display: inline; }
-.l_top_log #l_settings_button, .l_locked.l_top_only #l_settings_button { display: none; }
+.l_ask_only #l_settings_button, .l_locked.l_ask_only #l_settings_button { display: none; }
 #l_last_update {
 	cursor: pointer;
 	font-size: 14px;
@@ -1149,7 +1149,7 @@ input[type=checkbox]:checked:disabled + label:before {
 		cursor: pointer;
 		color: var(--l-color-0) !important;
 	}
-	.l_top_only .l_marquee_warning a:hover { border-bottom: 2px solid var(--l-color-0); }
+	.l_ask_only .l_marquee_warning a:hover { border-bottom: 2px solid var(--l-color-0); }
 	.l_stage_only .l_marquee_warning span, .l_marquee_talk span { cursor: pointer; }
 	#l_menu_left span:hover, #l_menu_right span:hover {
 		background: linear-gradient(45deg, var(--l-color-8) 0%, rgba(0,0,0,1) 100%);
@@ -1176,7 +1176,7 @@ input[type=checkbox]:checked:disabled + label:before {
 	#l_content_table tr.l_notify_down:hover .l_history_toggle, #l_content_table tr.l_notify_down td.l_news:hover, #l_content_table tr.l_notify_top_down:hover .l_history_toggle, #l_content_table tr.l_notify_top_down td.l_news:hover {
 		background-color: var(--l-color-16) !important;
 	}
-	#l_content_table tr td:nth-child(1):hover ~ .l_history_toggle:not(.l_history), #l_content_table tr td:nth-child(3):hover ~ .l_history_toggle:not(.l_history), #l_content_table tr td:nth-child(4):hover ~ .l_history_toggle:not(.l_history), #l_root:not(.l_top_only) #l_content_table tr td:nth-child(2):hover ~ .l_history_toggle  { 
+	#l_content_table tr td:nth-child(1):hover ~ .l_history_toggle:not(.l_history), #l_content_table tr td:nth-child(3):hover ~ .l_history_toggle:not(.l_history), #l_content_table tr td:nth-child(4):hover ~ .l_history_toggle:not(.l_history), #l_root:not(.l_ask_only) #l_content_table tr td:nth-child(2):hover ~ .l_history_toggle  { 
 		background-color: initial !important;
 	}
 	#l_content_table tr:hover td:not(.l_static) .l_hover_inactive, #l_content_table tr:hover td:not(.l_static) .l_hover_inactive, #l_content_table .l_tr_keyrow_selected td:not(.l_static) .l_hover_inactive, .l_content_table_alt_display tr td:not(.l_static) .l_hover_inactive {
