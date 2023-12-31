@@ -649,6 +649,7 @@ i { font-style: normal !important; }
 	border: 1px solid #444;
 	user-select: none;
 }
+.l_ask_only #l_content_table tr { font-size: 20px; }
 #l_content_table tbody tr:nth-child(odd){
 	background-color: rgba(0, 0, 0, 0.05);
 }
@@ -1248,6 +1249,7 @@ input[type=checkbox]:checked:disabled + label:before {
 		margin-bottom: 0 !important;
 		width: 100%;
 	}
+	.l_ask_only #l_content_table tr { font-size: 16px; }
 	#l_marquee_container { max-height: 175px !important; }
 	#l_marquee_flash { font-size: 12px; }
 	#l_settings_button {

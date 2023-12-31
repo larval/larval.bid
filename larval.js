@@ -1365,7 +1365,7 @@ NET: {
 			else if($DAT.LAST && !$TOP.ON && (minsOff=Math.floor(($DAT.LAST-Date.now()/1000)/60,0)) > 9)
 				$MRQ.flash(`Your local clock is <i>${minsOff}</i> minutes ahead of the server.`);
 			else if($ASK.ON)
-				$MRQ.flash(`<i>${Math.abs(minsOff)}</i> minutes since last update.`, true, -1);
+				$MRQ.flash(`Dictionary.com domains under $5K - <i>${Math.abs(minsOff)}</i> minutes since last update.`, true, -1);
 			else if(minsOff < -9)
 				$MRQ.flash(`Server data is unexpectedly old: <i>${Math.abs(minsOff)}</i> minutes behind.`);
 			$ANI.updateFlash();
