@@ -2,7 +2,7 @@
 | | .'|  _| | | .'| |  (: An excuse to escape into the nostalgia of slapping something together agian :)
 |_|__,|_|  \_/|__,|*/
 
-const $L = { _components: ['EVT', 'ASK', 'CFG', 'GUI', 'HST', 'DAT', 'NFY', 'NET', 'ANI', 'MRQ', 'POL', 'TOP'],
+const $L = { _components: ['EVT', 'ASK', 'CFG', 'GUI', 'HST', 'DAT', 'NFY', 'NET', 'ANI', 'MRQ', 'POL'],
 _title:	'',
 _titlePrefix: '',
 _wakeLock: null,
@@ -64,13 +64,12 @@ _eventMap: {
 _clickMap: {
 	'l_alt_link':_              => location.href='//larval.com',
 	'l_content_table_header':_  => $DAT.setStageSort(_.idx),
-	'l_fixed':_                 => $GUI.broadBehaviorToggle($TOP.ON),
+	'l_fixed':_                 => $GUI.broadBehaviorToggle(false),
 	'l_history_toggle':_        => $HST.dropDownToggle(_.idx),
 	'l_hotkey_help':_           => $MRQ.hotKeyHelp(),
 	'l_last_update':_           => $POL.forceNextStage(),
 	'l_marquee_flash':_         => $HST.gotoStageData(0),
 	'l_marquee_info':_          => $DAT.setURLFormat(_.sym, false),
-	'l_marquee_talk':_          => $TOP.searchFromURL(_.raw, true),
 	'l_menu_link':_             => $GUI.menuClick(_.el.innerText),
 	'l_news':_                  => typeof $DAT.DATA['items'][_.idx][$LNK]=='number' ? $GUI.relatedToggle(_.idx) : $W.open($DAT.DATA['items'][_.idx][$LNK], `l_news_${_.sym}`, _extURLOptions),
 	'l_notify_disable':_        => $NFY.exception($DAT.DATA['items'][_.idx][$DOM], true),
@@ -94,7 +93,7 @@ _hotKeyMap: {
 	'End':e                     => $GUI.KEY_ROW = e.parentElement.childElementCount - 1,
 	'Enter':e                   => $EVT.click(e),
 	'Equal':e                   => $CFG.updateAudioVolume(true),
-	'Escape':e                  => $GUI.broadBehaviorToggle($TOP.ON),
+	'Escape':e                  => $GUI.broadBehaviorToggle(false),
 	'F5':e                      => $CFG.clear('User requested.'),
 	'F8':e                      => $NET.nextURL(true) && $MRQ.flash(`Changed endpoint to: <i>${$NET.URL}</i>`),
 	'F12':e                     => $GUI.setThemeRandom('<i>Going under the hood?</i> Let\'s make the outside look as hideous as the inside first.'),
@@ -274,15 +273,6 @@ EVT: {
 			return;
 		$GUI.contentTableRoll(e&&e.shiftKey);
 		let rows=$E('l_content_table').getElementsByTagName('tr'), lastKeyRow=$GUI.KEY_ROW, match;
-		if($TOP.ON) {
-			if($I(['Escape','Backspace','Delete'],(match=e&&e.code)?match:'') >= 0 && (!_I||!$TOP.searchCriteria()))
-				return($GUI.broadBehaviorToggle(true));
-			else if(!$isMobile(false) && (!document.activeElement || document.activeElement.id!='l_top_search'))
-				$E('l_top_search').focus();
-			$CFG.buttonToggle(true);
-			$TOP.searchRunOnEnter(e);
-			return;
-		}
 		if(!$GUI.KEY_ROW) {
 			for(let i=0; i < rows.length; i++) {
 				if(!rows[i].matches(':hover'))
@@ -326,7 +316,6 @@ EVT: {
 		if($GUI.KEY_ROW > 0)
 			rows[$GUI.KEY_ROW].scrollIntoView({behavior:'smooth', block:'center'});
 	},
-	keypress: e => $TOP.searchRunOnEnter(e),
 	keyup: e => $GUI.contentTableRoll(e.shiftKey),
 	visibilitychange: e => {
 		$GUI.FRAMES = null;
@@ -335,9 +324,7 @@ EVT: {
 		$NFY.requestWakeLock();
 		while($NFY.NOTIFICATIONS.length > 0)
 			($NFY.NOTIFICATIONS.shift()).close();
-		if($TOP.ON)
-			$MRQ.update();
-		else if($MRQ.INTERVAL) {
+		if($MRQ.INTERVAL) {
 			$MRQ.update(true);
 			$POL.progressReset();
 		}
@@ -364,7 +351,7 @@ EVT: {
 	touchstart: e => $GUI.SWIPE_START = [e.changedTouches[0].clientX, e.changedTouches[0].clientY, -1],
 	touchmove: e => {
 		const height=$W.innerHeight||$D.documentElement.clientHeight||$D.body.clientHeight;
-		if($W.pageYOffset || !$ANI.COMPLETE || !$GUI.SWIPE_START || $TOP.ON || height < 1 || (e.touches&&e.touches.length>1))
+		if($W.pageYOffset || !$ANI.COMPLETE || !$GUI.SWIPE_START || height < 1 || (e.touches&&e.touches.length>1))
 			$GUI.SWIPE_START = null;
 		else if($GUI.SWIPE_START[2] < 0)
 			$GUI.SWIPE_START[2] = e.changedTouches[0].clientY;
@@ -374,7 +361,7 @@ EVT: {
 	touchend: e => {
 		if($E('l_fixed_highlight') && _E.style.opacity)
 			_E.style.opacity = 0;
-		if(!$GUI.SWIPE_START || $TOP.ON) return;
+		if(!$GUI.SWIPE_START) return;
 		const swipeMovement = [e.changedTouches[0].clientX-$GUI.SWIPE_START[0], e.changedTouches[0].clientY-$GUI.SWIPE_START[1], e.changedTouches[0].clientY-$GUI.SWIPE_START[2]],
 			width = $W.innerWidth||$D.documentElement.clientWidth||$D.body.clientWidth,
 			height = $W.innerHeight||$D.documentElement.clientHeight||$D.body.clientHeight,
@@ -402,12 +389,8 @@ EVT: {
 				$W.history.back();
 			return;
 		}
-		else if($TOP.ON && e.state.items)
-			$NET.parseStageData(e.state, {'fromPopState':true,'updateView':true});
 		else if(typeof(e.state.toggle) == 'boolean' || e.state.root)
 			$DAT.toggleStage(e.state.root || e.state.toggle);
-		else if($TOP.ON === (typeof(e.state.fixed) != 'undefined'))
-			$DAT.toggleStage($TOP.ON);
 		else if(typeof(e.state.fixed) == 'number') {
 			$W.history.go(e.state.fixed);
 			$HST.gotoStageData(e.state.fixed);
@@ -433,10 +416,7 @@ ANI: {
 			_E.className = $ANI.ID;
 		$E('l_root').classList.add('l_animations_complete');
 		$E('l_menu').className = ($DAT.DATA && !$isWeekend() ? $GUI.getThemeMode('l_') : 'l_default');
-		if(!$TOP.ON)
-			$POL.setNextStage(!$DAT.DATA||!$DAT.DATA['items'] ? (!$DAT.DATA?$POL.NOW:$POL.SHORT) : $POL.getNextSync());
-		else if($TOP.searchCriteria())
-			$CFG.buttonToggle(true);
+		$POL.setNextStage(!$DAT.DATA||!$DAT.DATA['items'] ? (!$DAT.DATA?$POL.NOW:$POL.SHORT) : $POL.getNextSync());
 		if($hasSettings() && $DAT.DATA && $DAT.DATA['marquee'] && $DAT.DATA['marquee'].length > 1)
 			$MRQ.update();
 		else
@@ -471,9 +451,7 @@ ANI: {
 				i += 0.1;
 			animate.beginElementAt(i);
 		}
-		if($TOP.LOG)
-			$TOP.WS.connect();
-		else if(nextPollMS && nextPollMS > 0)
+		if(nextPollMS && nextPollMS > 0)
 			$POL.setNextStage(nextPollMS, true);
 		else
 			return;
@@ -503,7 +481,7 @@ ANI: {
 	},
 	disableIfUnderFPS: (ms, fps, attempt) => {
 		if(!$GUI.FRAMES) {
-			if(!fps || $E($ANI.ID) || _settings[$ANI.ID] || $TOP.LOG || $isMobile(true) || !['requestAnimationFrame','performance'].every(fn=>$W[fn]))
+			if(!fps || $E($ANI.ID) || _settings[$ANI.ID] || $isMobile(true) || !['requestAnimationFrame','performance'].every(fn=>$W[fn]))
 				return($removeFunction('ANI', 'disableIfUnderFPS'));
 			$GUI.FRAMES = {'fps':fps, 'duration':ms/1000, 'stop':performance.now()+ms, 'frames':0, 'attempt':attempt>0?attempt:0};
 		}
@@ -533,7 +511,6 @@ ANI: {
 CFG: {
 	setup: () => {
 		$GUI.setStage($ASK.ON ? 'ask' : 'bid');
-		if($TOP.ON) $CFG.buttonTextToggle(false);
 		$CFG.load(false);
 	},
 	load: passive => {
@@ -634,7 +611,7 @@ CFG: {
 	tabUpdateUI: () => _assetTypes.forEach(type => $E(type).classList[_settings[type]['l_show']?'add':'remove']('l_show')),
 	tabSelect: el => {
 		const id=(el?el.id:_settingsSelectedTabName);
-		if(!id || $TOP.ON) return;
+		if(!id || $ASK.ON) return;
 		if($E(_settingsSelectedTabName))
 			_E.classList.remove('l_tab_selected');
 		if($E(id))
@@ -643,7 +620,7 @@ CFG: {
 		$CFG.load(true);
 		$CFG.tabUpdateUI();
 	},
-	buttonTextToggle: opened => $E('l_settings_button').innerHTML = (opened?`&#9660; ${$TOP.ON?'search':'settings'} &#9660;`:`&#9650; ${$TOP.ON?'search':'settings'} &#9650;`),
+	buttonTextToggle: opened => $E('l_settings_button').innerHTML = (opened?`&#9660; settings &#9660;`:`&#9650; settings &#9650;`),
 	buttonToggle: (direction, force) => {
 		if(!$E('l_control') && ($DAT.DATA||force))
 			return(false);
@@ -679,7 +656,7 @@ DAT: {
 		$GUI.TABLE_SOFT_LIMIT = Math.abs($GUI.TABLE_SOFT_LIMIT);
 		if($GUI.setTheme($GUI.getThemeMode()) !== false && $Q('meta[name="theme-color"]'))
 			_Q.setAttribute('content', _themes[_theme][_themeBGColorIndex]);
-		if(!$TOP.ON && location.pathname.length > 1 && $W.history && $W.history.replaceState)
+		if(location.pathname.length > 1 && $W.history && $W.history.replaceState)
 			$W.history.replaceState({}, null, '/');
 	},
 	sortStage: updateView => {
@@ -769,12 +746,11 @@ DAT: {
 		return($DAT.ON_TOP);
 	},
 	setSymbolsOnTop: (symbols, removeOrToggle, updateView) => {
-		if($TOP.ON) return;
 		const remove=(removeOrToggle===true), toggle=(removeOrToggle===null);
 		let msg='', orderedTopListStr='', orderedTopList, savedSymbols, onTopDiff=$U(Object.values($DAT.ON_TOP)).length;
 		if(!symbols && remove)
 			$DAT.ON_TOP = {};
-		else if(symbols && (savedSymbols=($TOP.ON?symbols:symbols.toUpperCase()).match(/[\^\*\$\~\@]?[A-Z0-9]+/ig)))
+		else if(symbols && (savedSymbols=symbols.toUpperCase().match(/[\^\*\$\~\@]?[A-Z0-9]+/ig)))
 			savedSymbols.forEach(sym => (remove||(toggle&&$DAT.ON_TOP[sym])) ? $DAT.delSymbolFromTop(sym) : $DAT.addSymbolToTop(sym));
 		orderedTopList = $U(Object.values($DAT.ON_TOP)).sort((a, b) => a.localeCompare(b));
 		orderedTopListStr = orderedTopList.join(', ').trim(', ');
@@ -858,15 +834,7 @@ GUI: {
 		else location.href = url;
 	},
 	broadBehaviorToggle: topMode => {
-		if(!$ANI.COMPLETE)
-			$ANI.fastSplash(true);
-		else if(topMode) {
-			if($E('l_top_search').disabled) return;
-			else if($TOP.LOG) $ANI.updateFlash();
-			else if($CFG.buttonToggle(false)) $TOP.searchRun('');
-			else $CFG.buttonToggle(true);
-			$MRQ.update();
-		}
+		if(!$ANI.COMPLETE) $ANI.fastSplash(true);
 		else if($scrollToTop() || $CFG.buttonToggle(false) || $HST.gotoStageData(0)) return;
 		else $POL.forceNextStage();		
 	},
@@ -976,7 +944,7 @@ GUI: {
 
 		while((indices.length > 0 && (i=r=indices.pop())) || ++i < $DAT.DATA['items'].length) {
 			const row=$DAT.DATA['items'][i], rowType='l_bids', isStock=(_I<0), notifyExcept=($I($NFY.EXCEPTIONS,row[$DOM])>=0), isOnTop=(row[$AID][0]=='+'), minutesRemaining=$minutesRemaining(row[$TME]);
-			let rowClass=rowType, notifyControl='', historyClass=($TOP.LOG?'':'l_history_toggle'), [tld,domain]=row[$ASK.ON?$ADOM:$DOM].split('.').reverse();
+			let rowClass=rowType, notifyControl='', historyClass='l_history_toggle', [tld,domain]=row[$ASK.ON?$ADOM:$DOM].split('.').reverse();
 			if(typeof _settings['l_tld_'+tld] == 'undefined')
 				tld = 'else';
 			notify = (!notifyExcept && isOnTop && _settings['l_tld_'+tld] && (!_settings['l_range_bids']||_settings['l_range_bids']>=row[$BID]) && (!_settings['l_range_mins']||_settings['l_range_mins']>=minutesRemaining) && (!_settings['l_range_len']||_settings['l_range_len']>=domain.length) && !(!_settings['l_numbers']&&domain.match(/[0-9]/)) && !(!_settings['l_hyphens']&&domain.match('-')));
@@ -1033,14 +1001,8 @@ GUI: {
 			$GUI.TABLE_SOFT_LIMIT = -$GUI.TABLE_SOFT_LIMIT;
 		if(_assetTypes.every(type => !_settings[type]['l_show']))
 			html += $F('f_no_results_row', ['No asset types are set to show in your settings.']);
-		else if(!htmlNormal && !htmlNew && !htmlPriority && !Object.keys(onTop).length) {
-			let noResults='No results found', dataWithLog=($DAT.DATA['log']?$DAT.DATA:$HST.DATA.find(d=>d['log']));
-			if($TOP.LOG)
-				noResults += ': Log data will appear when it becomes available.';
-			else if($TOP.ON && dataWithLog && $M(/#(.+)/,dataWithLog['log']))
-				noResults += `: If applicable, your query will be added to the queue. (see: <a href="//${_M[1]}">${_M[1]}</a>)`;
-			html += $F('f_no_results_row', [noResults]);
-		}
+		else if(!htmlNormal && !htmlNew && !htmlPriority && !Object.keys(onTop).length)
+			html += $F('f_no_results_row', ['No results found']);
 		else
 			html += htmlPriority + htmlNew + htmlNormal;
 		$E('l_more').className = $GUI.TABLE_SOFT_LIMIT > 0 ? 'l_more' : 'l_no_more';
@@ -1048,8 +1010,6 @@ GUI: {
 		if(doNotify && !$isSafari())
 			$E('l_content_table').classList.add('l_content_table_notify_'+Math.abs($DAT.SORT));
 		$E('l_content_table').innerHTML = html;
-		if($TOP.ON)
-			Array.from($A('.l_top_user')).forEach(u => u.title = u.innerText);
 		$GUI.contentTableUpdateRowCountThatAreInView();
 		if(!doNotResetKeyRow)
 			$GUI.KEY_ROW = 0;
@@ -1108,10 +1068,10 @@ HST: {
 		$W.history.pushState(obj, _title, obj['path']?obj['path']:'');
 	},
 	pushWithPath: obj => obj['path'] ? $HST.push(obj) : null,
-	dropDownToggle: idx => (!$HST.FIRST&&!$TOP.ON&&$HST.IDX>=-1) ? $NET.getHistoryData({'dropDownIndex':idx}) : $HST.dropDown(idx),
+	dropDownToggle: idx => (!$HST.FIRST&&$HST.IDX>=-1) ? $NET.getHistoryData({'dropDownIndex':idx}) : $HST.dropDown(idx),
 	dropDown: idx => {
-		const types=($TOP.ON?[$TSYM,$TRAT,$TPCT,$TPCR,$TSTR,$TEND]:[$BID,$PRC,$TMU,$TME]), stageRow=($DAT.DATA&&$DAT.DATA['items']&&$DAT.DATA['items'][idx]?$DAT.DATA['items'][idx]:null);
-		let stageDataForSymbols=($TOP.ON?stageRow[$THST]:$HST.getForSymbol(stageRow[$DOM],$DAT.DATA['ts'])), hadHistoryDisplays=[], skipIdx=[];
+		const types=[$BID,$PRC,$TMU,$TME], stageRow=($DAT.DATA&&$DAT.DATA['items']&&$DAT.DATA['items'][idx]?$DAT.DATA['items'][idx]:null);
+		let stageDataForSymbols=$HST.getForSymbol(stageRow[$DOM],$DAT.DATA['ts']), hadHistoryDisplays=[], skipIdx=[];
 		if(!stageDataForSymbols) return;
 		if($A('.l_history_active'))
 			hadHistoryDisplays = Array.from(_A).map(e => e.remove() || e.id);
@@ -1129,7 +1089,7 @@ HST: {
 				continue;
 			stageDataForSymbols.forEach((row, idx) => {
 				if(row && skipIdx.indexOf(idx) < 0)
-					htmlItems.push(`<div class="l_hover_container${$TOP.ON&&row[$HILT]?' l_top_searched_symbol':''}">${$GUI.cell(row,type,idx)}</div>`);
+					htmlItems.push(`<div class="l_hover_container">${$GUI.cell(row,type,idx)}</div>`);
 			});
 			if(htmlItems.length == 0)
 				htmlItems.push(`<div class="l_hover_container">${$GUI.cell(stageRow,type)}</div>`);
@@ -1217,13 +1177,10 @@ MRQ: {
 			setTimeout(() => $GUI.setMenu($DAT.DATA['menu']), 500);
 	},
 	update: (resetInterval, passive) => {
-		if(!$ANI.COMPLETE || !$DAT.DATA || $TOP.LOG || !$DAT.DATA['marquee'] || $DAT.DATA['marquee'].length < 2 || (!$TOP.ON&&passive&&$E('l_marquee_about')))
+		if(!$ANI.COMPLETE || !$DAT.DATA || !$DAT.DATA['marquee'] || $DAT.DATA['marquee'].length < 2 || (passive&&$E('l_marquee_about')))
 			return;
 		let html=$F('f_marquee_blink_wide'), itemHtml='', rank=0, maxRank=20, topType='', lastTopType='';
-		if($TOP.ON)
-			itemHtml = `<div class="l_marquee_warning"><i>${_char['warning']} LARVAL . TOP ${_char['warning']}</i> <a href="//top.larval.com" target="_blank">top.larval.com</a> is a sentiment tracker for <a href="//stocktwits.com" target="_blank">stocktwits.com</a>, you can change the <span>.com</span> to <span>.top</span> (<a href="//stocktwits.top" target="_blank">stocktwits.top</a>) with most urls to quickly view and automatically queue monitoring of a user's most recent applicable posts.</div>`;
-		else
-			_warnings.filter(Boolean).forEach(msg => itemHtml += `<div class="l_marquee_warning"><i>${_char['warning']} WARNING ${_char['warning']}</i>${msg}</div> `);
+		_warnings.filter(Boolean).forEach(msg => itemHtml += `<div class="l_marquee_warning"><i>${_char['warning']} WARNING ${_char['warning']}</i>${msg}</div> `);
 		if(itemHtml)
 			html = itemHtml + _F;
 		for(let i=0; i < $DAT.DATA['marquee'].length; i++) {
@@ -1256,7 +1213,7 @@ MRQ: {
 			else
 				continue;
 			if(itemHtml)
-				html += (i&&($TOP.ON||lastTopType!=topType)?_F:'') + itemHtml;
+				html += (i&&lastTopType!=topType?_F:'') + itemHtml;
 			if(topType == 'continue') continue;
 			if(topType == 'break') break;
 			lastTopType = topType;
@@ -1328,14 +1285,14 @@ NET: {
 		.catch(err => $NET.getCallback(callback, null, args));
 	},
 	getCallback: (callback, json, args) => ($DAT.FETCHING=$E('l_logo').classList.remove('l_net_loading')) || callback(json, args),
-	getStageData: updateView => $NET.get(`/${$DAT.MODE}.json`, $NET.parseStageData, $X({'updateView':updateView,'search':$TOP.ON?$TOP.searchCriteria():''})),
+	getStageData: updateView => $NET.get(`/${$DAT.MODE}.json`, $NET.parseStageData, $X({'updateView':updateView,'search':''})),
 	parseStageData: (json, args) => {
 		let retry=0, minsOff=0;
 		if(!json)
 			retry = (!$DAT.DATA && $NET.nextURL()) ? $POL.NOW : $POL.SHORT;
 		else if(!json['ts'] || ($HST.DATA.length > 0 && $HST.DATA[$HST.DATA.length-1]['ts'] == json['ts']))
 			retry = $POL.SHORT;
-		else if($HST.IDX >= 0 && !$TOP.ON)
+		else if($HST.IDX >= 0)
 			$HST.DATA.push($cloneObject(json));
 		else {
 			if(!args || !args['fromPopState'])
@@ -1359,7 +1316,7 @@ NET: {
 			}
 			if($DAT.DATA['notify'] && $hasSettings())
 				$MRQ.flash(`${$F('f_marquee_blink')}<span id="l_marquee_notify">${$DAT.DATA['notify']}</span>${_F}`, false, 8000);
-			else if($DAT.LAST && !$TOP.ON && (minsOff=Math.floor(($DAT.LAST-Date.now()/1000)/60,0)) > 9)
+			else if($DAT.LAST && (minsOff=Math.floor(($DAT.LAST-Date.now()/1000)/60,0)) > 9)
 				$MRQ.flash(`Your local clock is <i>${minsOff}</i> minutes ahead of the server.`);
 			else if($ASK.ON)
 				$MRQ.flash(`Dictionary.com domains under $5K - <i>${Math.abs(minsOff)}</i> minutes since last update.`, true, -1);
@@ -1368,64 +1325,17 @@ NET: {
 			$ANI.updateFlash();
 			$GUI.setTheme($DAT.MODE);
 		}
-		if($TOP.ON && !retry) {
-			if($TOP.LOG) {
-				if(!($TOP.LOG=$DAT.DATA['log']))
-					$MRQ.flash('Live log support is currently not available, reverted to top mode.', true, 20000);
-				else {
-					$DAT.DATA.items = [];
-					$TOP.WS.connect();
-					return;
-				}
-			}
-			if($HST.DATA.length==1 && json['search'])
-				$HST.DATA.unshift({'top':true,'items':[],'marquee':[],'next':0,'highlight':0,'ts':0});
-			else if(!$DAT.DATA['search']) {
-				if($HST.DATA.length > 1 && !json['search'])
-					$HST.DATA.pop();
-				$HST.DATA[0] = $cloneObject($DAT.DATA);
-			}
-			$E('l_top_search').disabled = false;
-			if(typeof json['search'] == 'string') {
-				_E.value = json['search'];
-				if(json['search'])
-					$CFG.buttonToggle(true);
-			}
-			if(json['search'])
-				$HST.updateStageData($HST.IDX=-2);
-			if($TOP.searchCriteria()) $ANI.fastSplash();
-			else if(!args || !args['fromPopState']) $NET.getHistoryData();
+		if($HST.DATA.length==1 && $W.history && $W.history.pushState) {
+			[1,null,-1].forEach(state => $HST.push({'fixed':state}));
+			$W.history.go(-1);
 		}
-		else {
-			if($HST.DATA.length==1 && $W.history && $W.history.pushState) {
-				[1,null,-1].forEach(state => $HST.push({'fixed':state}));
-				$W.history.go(-1);
-			}
-			$POL.setNextStage(retry ? retry : $POL.getNextSync());
-		}
+		$POL.setNextStage(retry ? retry : $POL.getNextSync());
 	},
 	getHistoryData: args => ($HST.FIRST=($HST.IDX>-1||--$HST.IDX<-1)) ? $NET.get(`/${$DAT.MODE}-history.json`, $NET.parseHistoryData, args) : null,
 	parseHistoryData: (json, args) => {
 		const dropDownMode=(args&&typeof args['dropDownIndex']!='undefined');
 		if(!json || typeof json != 'object' || !Object.keys(json).length)
 			return($MRQ.flash('Unexpected error pulling history.'));
-		else if($TOP.ON) {
-			$DAT.DATA['items'].forEach((row, i) => {
-				if(!json['items'][row[0]]) return;
-				$DAT.DATA['items'][i][$TSYM] = $HST.toSummaryString(json['items'][row[0]]);
-				$DAT.DATA['items'][i].push(json['items'][row[0]]);
-			});
-			if(!$DAT.DATA['search']) {
-				$DAT.DATA['search'] = '';
-				$DAT.DATA['path'] = '/';
-				$HST.DATA[0] = $cloneObject($DAT.DATA);
-				$HST.pushWithPath($HST.DATA[0]);
-			}
-			if(dropDownMode)
-				$HST.dropDown(args['dropDownIndex'])
-			$GUI.contentTableUpdate();
-			return;
-		}
 		let h = json.length;
 		while(--h > 0) {
 			if(json[h]['ts'] == $HST.DATA[0]['ts'])
@@ -1616,87 +1526,6 @@ ASK: {
 },
 
 /*************************************************************************************************\
-\*******  TOP MODE LOGIC (top.larval.com & log.larval.com)  *****************  [ $TOP.* ]  *******/
-TOP: {
-	ON: false, LOG: false, INTERVAL: null, SOCKET: null,
-
-	setup: () => {
-		if(typeof WebSocket == 'undefined' || $TOP.INTERVAL || !($TOP.LOG=!!$D.domain.match(/log/i)))
-			return;
-		$MRQ.flash('Live log connection: <i>Initiating</i>', true, -1)
-		$E('l_root').classList.add('l_top_log');
-		$TOP.INTERVAL = setInterval($TOP.WS.connect, 30000);
-	},
-	timeFormat: str => str + (str.match(/[0-9]{2}\/[0-9]{2}$/)?'@[<u>TBD</u>]':''),
-	searchCriteria: set => (typeof set=='string'?($E('l_top_search').value=set):$E('l_top_search').value) + (_E.value&&_E.dataset.append?_E.dataset.append:''),
-	searchRunOnEnter: e => (!e||(e.keyCode!=13&&!(e.code&&e.code.match(/Enter$/)))) ? null : $TOP.searchRun(false),
-	searchRun: value => {
-		if($E('l_top_search').disabled) return;
-		_E.dataset.append = (value===false?'!':'');
-		if(typeof value=='string')
-			_E.value = value;
-		if(!_E.value && $HST.DATA.length && $HST.DATA[0]['items'].length>0) {
-			$HST.IDX = 0;
-			$HST.updateStageData(true);
-		}
-		else {
-			_E.disabled = true;
-			_E.blur();
-			$POL.forceNextStage(true);
-		}
-	},
-	searchFromURL: (str, run) => {
-		let args=[];
-		Object.entries(_topURLMap).find(kv => $M(kv[1],str) ? kv[0].split('').forEach((c,i) => args.push(c+_M[i+1])) : null);
-		if($E('l_top_search') && args.length > 0)
-			_E.value = args.join(' ');
-		if(!run) return(_E.value);
-		else if(!$TOP.ON)
-			$DAT.toggleStage(str);
-		else
-			$TOP.searchRun();
-	},
-	WS: {
-		connect: () => {
-			if(!$TOP.LOG || ($TOP.SOCKET && $TOP.SOCKET.readyState !== WebSocket.CLOSED))
-				return;
-			$TOP.SOCKET = new WebSocket($TOP.LOG.replace(/#.*/,''));
-			Object.keys($TOP.WS).forEach(n => `on${n}` in $TOP.SOCKET ? $TOP.SOCKET.addEventListener(n,$TOP.WS[n]) : null); 
-		},
-		message: e => {
-			try {
-				const row = JSON.parse(e.data);
-				if(!$DAT.LAST || !row || !row.length || !$DAT.DATA.items.unshift(row) || !$ANI.COMPLETE)
-					return;
-				$E('l_content_table').insertRow(1).innerHTML = `<tr class="l_bids" data-ref="0">
-					<td class="l_top_user" title="${$H(row[$TUSR])}"><i>${$GUI.cell(row,$TUSR)}</i></td>
-					<td>${$GUI.cell(row,$TSYM)}</td>
-					<td>${$GUI.cell(row,$TRAT)}</td>
-					<td>${$GUI.cell(row,$TPCT)}</td>
-					<td>${$GUI.cell(row,$TPCR)}</td>
-					<td>${$GUI.cell(row,$TSTR)}</td>
-					<td>${$GUI.cell(row,$TEND)}</td>
-					</tr>`;
-				if($DAT.DATA.items.length > 500)
-					$DAT.DATA.items.length--;
-				Array.from($E('l_content_table').getElementsByTagName('tr')).forEach((tr,i) => {
-					if(i > $DAT.DATA.items.length) _E.deleteRow(i);
-					else if(i) tr.dataset.ref = i-1;
-				});
-			}
-			catch(e) { }
-		},
-		open: e => {
-			if($DAT.DATA)
-				$DAT.DATA.items = [];
-			$GUI.contentTableUpdate();
-			$MRQ.flash('Live log connection: <i>Active</i>', true, -1)
-		},
-		close: e => $MRQ.flash('Live log connection: <span class="l_marquee_highlight"><i>INACTIVE</i></span>', true, -1)
-	}
-},
-
-/*************************************************************************************************\
 \*******  MISCELLANEOUS HELPERS  ************************************************  [ $* ]  *******/
 multiplierFormat: (number, digits, approx) => {
 	if(typeof number != 'number')
@@ -1721,7 +1550,7 @@ epochNow: () => Math.floor(Date.now() / 1000),
 epochToDate: epoch => new Date(epoch * 1000).toLocaleTimeString('en-US', {weekday:'short',hour:'numeric',minute:'2-digit',timeZoneName:'short'}),
 createURL: (symbol, type) => _keyMap[_keyMap[$GUI.KEY_MAP_IDX]?$GUI.KEY_MAP_IDX:$GUI.KEY_MAP_IDX_DEFAULT][type].replace('@',symbol),
 cloneObject: obj => typeof structuredClone=='function' ? structuredClone(obj) : JSON.parse(JSON.stringify(obj)),
-updateTitleWithPrefix: setPrefix => $D.title = (typeof setPrefix=='string' && !$TOP.ON ? (_titlePrefix=setPrefix) : _titlePrefix) + _title,
+updateTitleWithPrefix: setPrefix => $D.title = (typeof setPrefix=='string' ? (_titlePrefix=setPrefix) : _titlePrefix) + _title,
 removeFunction: (comp, func) => $W['$'+comp][func] = $L[comp][func] = () => void(0),
 hasSettings: () => localStorage && localStorage.getItem('larval'),
 isSafari: () => /^((?!chrome|android).)*safari/i.test(navigator.userAgent),
