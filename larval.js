@@ -129,7 +129,7 @@ _enumMap: {
 	},
 	'ask': {
 		'ADOM':_   => $H(_.val),
-		'APRC':_   => '$'+$N(Math.abs(_.val), 2),
+		'AASK':_   => '$'+$N(Math.abs(_.val), 2),
 		'ACHG':_   => '$'+$N(Math.abs(_.val), 2),
 		'HMID':0, 'HPRC':1, 'HMOD':2, 'HPCT':3, 'HPCR':4, 'HSTR':5, 'HEND':6, 'HILT':7
 	}
@@ -815,7 +815,7 @@ DAT: {
 GUI: {
 	MAPS: {'bid':[],'ask':[]}, MAP: null,
 	KEY_MAP_IDX_DEFAULT: 'XX', KEY_MAP_IDX: null, KEY_ROW: 0,
-	TABLE_SOFT_LIMIT: 100, TABLE_ROWS_IN_VIEW: 10,
+	TABLE_SOFT_LIMIT: 200, TABLE_ROWS_IN_VIEW: 10,
 	FRAMES: null, SWIPE_START: null,
 
 	setup: () => {
@@ -942,7 +942,7 @@ GUI: {
 		if(!$DAT.DATA || !$ANI.COMPLETE) return;
 		$E('l_menu').className = ($ANI.COMPLETE && !$isWeekend() ? $GUI.getThemeMode('l_') : 'l_default');
 		let i=-1, r=-1, rowRules={}, notifyRows=[], indices=[], notify=false, notifyRelated=false, visibleRows=0, onTop={}, htmlRow='', htmlPriority='', htmlNew='', htmlNormal='', html='<tr>', stockAssetType='l_bids';
-		const columns = ($ASK.ON ? ['type', 'domain','price','change'] : ['site','domain','age','traf<i>fic</i>','bids','price','updated','end']);
+		const columns = ($ASK.ON ? ['type', 'domain','ask','change'] : ['site','domain','age','traf<i>fic</i>','bids','price','updated','end']);
 		$E('l_root').classList[$DAT.DATA['locked']?'add':'remove']('l_locked');
 		if(_assetTypes[0] != stockAssetType) {
 			if($E(_assetTypes[0]))
@@ -1006,7 +1006,7 @@ GUI: {
 				htmlRow = `<tr class="${rowClass}" data-ref="${i}">
 					<td>BIN</td>
 					<td class="l_static">${$GUI.cell(row,$ADOM)}</td>
-					<td>${$GUI.cell(row,$APRC)}</td>
+					<td>${$GUI.cell(row,$AASK)}</td>
 					<td>${$GUI.cell(row,$ACHG)}</td>
 					</tr>`;
 			else
