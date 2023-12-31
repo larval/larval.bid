@@ -270,7 +270,7 @@ EVT: {
 	},
 	keydown: e => {
 		$ANI.fastSplash();
-		if(!$ANI.COMPLETE||!$DAT.DATA||$TOP.LOG||(e&&(e.ctrlKey||e.altKey))||(e&&$DAT.toggleStage(e)))
+		if(!$ANI.COMPLETE||!$DAT.DATA||$ASK.ON||(e&&(e.ctrlKey||e.altKey))||(e&&$DAT.toggleStage(e)))
 			return;
 		$GUI.contentTableRoll(e&&e.shiftKey);
 		let rows=$E('l_content_table').getElementsByTagName('tr'), lastKeyRow=$GUI.KEY_ROW, match;
@@ -388,11 +388,8 @@ EVT: {
 	},
 	popstate: e => {
 		$CFG.buttonToggle(false);
-		if(!e || !e.state || $TOP.LOG) {
-			if(!$TOP.ON)
-				$HST.gotoStageData(1);
+		if(!e || !e.state || $ASK.ON)
 			return;
-		}
 		if($HST.SESSION_ID < 0) {
 			if(!e.state.session || e.state.root) {
 				if($HST.NEXT) {
