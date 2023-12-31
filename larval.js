@@ -128,8 +128,8 @@ _enumMap: {
 	},
 	'ask': {
 		'ADOM':_   => $H(_.val),
-		'AASK':_   => '$'+$N(Math.abs(_.val), 2),
-		'ACHG':_   => '$'+$N(Math.abs(_.val), 2),
+		'AASK':_   => '$'+$N(_.val, 2),
+		'ACHG':_   => (_.val<0?'-$':'$')+$N(Math.abs(_.val), 2),
 		'HMID':0, 'HPRC':1, 'HMOD':2, 'HPCT':3, 'HPCR':4, 'HSTR':5, 'HEND':6, 'HILT':7
 	}
 },
