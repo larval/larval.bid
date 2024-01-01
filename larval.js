@@ -1102,7 +1102,7 @@ HST: {
 	},
 	gotoStageData: direction => {
 		let lastIndex=$HST.IDX, quiet=false;
-		if($DAT.FETCHING && $DAT.FETCHING.match('history'))
+		if($ASK.ON || ($DAT.FETCHING && $DAT.FETCHING.match('history')))
 			return(false);
 		else if(!direction) {
 			$GUI.KEY_ROW = 0;
