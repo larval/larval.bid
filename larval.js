@@ -240,6 +240,8 @@ EVT: {
 			idx = dataRef;
 			if(!$DAT.DATA['items'][idx])
 				sym = idx;
+			else if($ASK.ON)
+				sym = $DAT.DATA['items'][idx][$ADOM];
 			else if($DAT.DATA['items'][idx][$AID].length > 3)
 				sym = $DAT.DATA['items'][idx][$AID].substr(3);
 			else
