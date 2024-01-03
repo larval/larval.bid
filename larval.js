@@ -130,6 +130,7 @@ _enumMap: {
 		'ADOM':_   => $H(_.val),
 		'AASK':_   => '$'+$N(_.val, 2),
 		'ACHG':_   => (_.val<0?'-$':'$')+$N(Math.abs(_.val), 2),
+		'AAGE':_   => $H(_.val),
 		'HMID':0, 'HPRC':1, 'HMOD':2, 'HPCT':3, 'HPCR':4, 'HSTR':5, 'HEND':6, 'HILT':7
 	}
 },
@@ -909,7 +910,7 @@ GUI: {
 		if(!$DAT.DATA || !$ANI.COMPLETE) return;
 		$E('l_menu').className = ($ANI.COMPLETE && !$isWeekend() ? $GUI.getThemeMode('l_') : 'l_default');
 		let i=-1, r=-1, rowRules={}, notifyRows=[], indices=[], notify=false, notifyRelated=false, visibleRows=0, onTop={}, htmlRow='', htmlPriority='', htmlNew='', htmlNormal='', html='<tr>', stockAssetType='l_bids';
-		const columns = ($ASK.ON ? ['type', 'domain','ask','change'] : ['site','domain','age','traf<i>fic</i>','bids','price','updated','end']);
+		const columns = ($ASK.ON ? ['type', 'domain','ask','change','age'] : ['site','domain','age','traf<i>fic</i>','bids','price','updated','end']);
 		$E('l_root').classList[$DAT.DATA['locked']?'add':'remove']('l_locked');
 		if(_assetTypes[0] != stockAssetType) {
 			if($E(_assetTypes[0]))
@@ -975,6 +976,7 @@ GUI: {
 					<td class="l_static">${$GUI.cell(row,$ADOM)}</td>
 					<td>${$GUI.cell(row,$AASK)}</td>
 					<td>${$GUI.cell(row,$ACHG)}</td>
+					<td>${$GUI.cell(row,$AAGE)}</td>
 					</tr>`;
 			else
 				htmlRow = `<tr class="${rowClass}" data-ref="${i}">
