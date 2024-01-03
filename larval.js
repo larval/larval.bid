@@ -127,10 +127,10 @@ _enumMap: {
 		'WAUD':0, 'WNOT':1, 'HLT':2, 'REL':8
 	},
 	'ask': {
-		'ADOM':_   => $H(_.val),
-		'AASK':_   => '$'+$N(_.val, 2),
-		'ACHG':_   => (_.val<0?'-$':'$')+$N(Math.abs(_.val), 2),
-		'AAGE':_   => $H(_.val),
+		'ADOM':_  => $H(_.val),
+		'AAGE':_  => $H(_.val)+'Y',
+		'AASK':_  => '$'+$N(_.val, 2),
+		'ACHG':_  => (_.val<0?'-$':'$')+$N(Math.abs(_.val), 2),
 		'HMID':0, 'HPRC':1, 'HMOD':2, 'HPCT':3, 'HPCR':4, 'HSTR':5, 'HEND':6, 'HILT':7
 	}
 },
@@ -648,12 +648,13 @@ DAT: {
 	setStage: stageData => {
 		if(!$DAT.DATA)
 			$E('l_fixed').style.filter = 'grayscale(0%)';
-		stageData['items'].forEach((r,i) => {
-			if(!stageData['items'][i][$LTMU])
-				stageData['items'][i][$LTMU] = stageData['items'][i][$TMU];
-			if(!stageData['items'][i][$LTME])
-				stageData['items'][i][$LTME] = stageData['items'][i][$TME];
-		});
+		if(!$ASK.ON)
+			stageData['items'].forEach((r,i) => {
+				if(!stageData['items'][i][$LTMU])
+					stageData['items'][i][$LTMU] = stageData['items'][i][$TMU];
+				if(!stageData['items'][i][$LTME])
+					stageData['items'][i][$LTME] = stageData['items'][i][$TME];
+			});
 		$DAT.DATA = $DAT.vpmStage(stageData);
 		$GUI.setSpread(stageData ? stageData['spreads'] : null);
 		$GUI.TABLE_SOFT_LIMIT = Math.abs($GUI.TABLE_SOFT_LIMIT);
@@ -910,7 +911,7 @@ GUI: {
 		if(!$DAT.DATA || !$ANI.COMPLETE) return;
 		$E('l_menu').className = ($ANI.COMPLETE && !$isWeekend() ? $GUI.getThemeMode('l_') : 'l_default');
 		let i=-1, r=-1, rowRules={}, notifyRows=[], indices=[], notify=false, notifyRelated=false, visibleRows=0, onTop={}, htmlRow='', htmlPriority='', htmlNew='', htmlNormal='', html='<tr>', stockAssetType='l_bids';
-		const columns = ($ASK.ON ? ['type', 'domain','ask','change','age'] : ['site','domain','age','traf<i>fic</i>','bids','price','updated','end']);
+		const columns = ($ASK.ON ? ['type', 'domain','age','ask','change'] : ['site','domain','age','traf<i>fic</i>','bids','price','updated','end']);
 		$E('l_root').classList[$DAT.DATA['locked']?'add':'remove']('l_locked');
 		if(_assetTypes[0] != stockAssetType) {
 			if($E(_assetTypes[0]))
@@ -974,9 +975,9 @@ GUI: {
 				htmlRow = `<tr class="${rowClass}" data-ref="${i}">
 					<td>BIN</td>
 					<td class="l_static">${$GUI.cell(row,$ADOM)}</td>
+					<td>${$GUI.cell(row,$AAGE)}</td>
 					<td>${$GUI.cell(row,$AASK)}</td>
 					<td>${$GUI.cell(row,$ACHG)}</td>
-					<td>${$GUI.cell(row,$AAGE)}</td>
 					</tr>`;
 			else
 				htmlRow = `<tr class="${rowClass}" data-ref="${i}">
