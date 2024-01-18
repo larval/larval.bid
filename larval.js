@@ -16,7 +16,7 @@ _assetTypes: ['l_bids'],
 _char: { 'up':"\u25b2 ", 'down':"\u25bc ", 'updown':"\u21c5 ", 'warning':"\u26a0 ", 'halt':"\u25a0 ", 'etf':"~", 'crypto':"*", 'futures':'^', 'currency':"$", 'user':"@" },
 _themes: {
 	'default':    ['#FAAD69','#FCE4BD','#DEA876','#FF9A3D','#7AFFED','#55B8FA','#302D2A','#363330','#3C3936','#006A82','#96EBFF','#D4F3FA','#96EBFF','#00AA00','#D4F3FA','#FF0000','#FAB45F','#DEB28C','#E6F6FA'],
-	'ask':        ['#FA6969','#FCBDBD','#DE7676','#FF773D','#7AFFAD','#55F7FA','#302D2A','#363330','#3C3936','#006A82','#96EBFF','#D4F3FA','#96EBFF','#00AA00','#D4F3FA','#FF0000','#FA905F','#DEA58C','#E6F6FA']
+	'ask':        ['#FA6969','#FCBDBD','#DE7676','#FF773D','#7AFFAD','#55F7FA','#302D2A','#363330','#3C3936','#006A82','#FACACA','#FFEDED','#FACACA','#00AA00','#D4F3FA','#FF0000','#FA905F','#DEA58C','#E6F6FA']
 }, _theme: '', _themeBGColorIndex: 7,
 _keyMap: {
 	'DD': ['https://www.dynadot.com/market/auction/@'],
@@ -951,7 +951,10 @@ GUI: {
 			let rowClass=rowType, notifyControl='', historyClass='l_history_toggle', [tld,domain]=row[$ASK.ON?$ADOM:$DOM].split('.').reverse();
 			if(typeof _settings['l_tld_'+tld] == 'undefined')
 				tld = 'else';
-			notify = (!notifyExcept && isOnTop && _settings['l_tld_'+tld] && (!_settings['l_range_bids']||_settings['l_range_bids']>=row[$BID]) && (!_settings['l_range_mins']||_settings['l_range_mins']>=minutesRemaining) && (!_settings['l_range_len']||_settings['l_range_len']>=domain.length) && !(!_settings['l_numbers']&&domain.match(/[0-9]/)) && !(!_settings['l_hyphens']&&domain.match('-')));
+			if($ASK.ON)
+				notify = (row[$AASK]==row[$ACHG]);
+			else
+				notify = (!notifyExcept && isOnTop && _settings['l_tld_'+tld] && (!_settings['l_range_bids']||_settings['l_range_bids']>=row[$BID]) && (!_settings['l_range_mins']||_settings['l_range_mins']>=minutesRemaining) && (!_settings['l_range_len']||_settings['l_range_len']>=domain.length) && !(!_settings['l_numbers']&&domain.match(/[0-9]/)) && !(!_settings['l_hyphens']&&domain.match('-')));
 			if(notify) {
 				rowClass += ` l_notify_top_up`;
 				notifyControl = $F('f_class_title_display', ['l_notify_disable', `Disable ${$GUI.cell(row,$DOM)} notifications for today`, 'x']);
