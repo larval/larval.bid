@@ -80,8 +80,6 @@ _clickMap: {
 	'l_tab':_                   => $CFG.tabSelect(_.el),
 	'l_warning_audio':_         => $NFY.playAudio(_audioTest, false, true),
 	'l_warning_never_notify':_  => $NFY.requestPermission(true),
-	'shift_default':_           => void(0),
-	'alt_default':_             => void(0),
 	'default':_                 => $W.open($createURL(_.sym, _.type), `l_${_.type}_${_.sym}`, _extURLOptions)
 },
 _hotKeyMap: {
@@ -247,15 +245,16 @@ EVT: {
 				sym = $DAT.DATA['items'][idx][$AID].substr(3);
 			else
 				sym = $DAT.DATA['items'][idx][$DOM];
-			if(!$ASK.ON)
+			if(!$ASK.ON) {
 				$GUI.KEY_MAP_IDX = $DAT.DATA['items'][idx][$AID].substr(1,2);
+				if(e.ctrlKey || e.altKey || e.shiftKey || e.type=='contextmenu') {
+					$GUI.KEY_MAP_IDX = 'XX';
+					sym = $DAT.DATA['items'][idx][$DOM];
+				}
+			}
 		}
 		const raw=sym;
-		if((e.ctrlKey || e.altKey || e.type=='contextmenu') && (el.dataset&&el.dataset.alt!='none'))
-			ref = 'alt_default';
-		else if(e.shiftKey && sym)
-			ref = 'shift_default';
-		else if(sym && !ref)
+		if(sym && !ref)
 			ref = 'default';
 		else if(msgIdx>=0 && $DAT.DATA['items'][idx][$THST] && $DAT.DATA['items'][idx][$THST][msgIdx]) {
 			sym += '/message/' + $DAT.DATA['items'][idx][$THST][msgIdx][$HMID];
