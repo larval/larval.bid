@@ -650,6 +650,7 @@ i { font-style: normal !important; }
 	user-select: none;
 }
 .l_ask_only #l_content_table tr { font-size: 20px; }
+.l_ask_only #l_content_table tr td:nth-child(5) { white-space: nowrap; }
 #l_content_table tbody tr:nth-child(odd){
 	background-color: rgba(0, 0, 0, 0.05);
 }
